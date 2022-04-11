@@ -24,8 +24,7 @@ function setup_paths!(toml::Dict, paths::Dict=default_paths)
             path = joinpath(relative, path)
         end
         path = abspath(path)
-        @show path
-        if !exists(path)
+        if !isdir(path)
             mkpath(path)
         end
         config[path_name] = path
