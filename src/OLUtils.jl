@@ -80,7 +80,7 @@ function setup_logger(log_file::AbstractString, verbose::Bool)
     @info "Logging to $log_file"
 end
 
-function setup_global!(toml::Dict, paths::Dict=default_paths, output_path="output_path", verbose::Bool)
+function setup_global!(toml::Dict, verbose::Bool, paths::Dict=default_paths, output_path="output_path")
     setup_paths!(toml, paths)
     setup_logging!(toml, output_path)
     config = toml["global"]
