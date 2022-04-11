@@ -44,7 +44,7 @@ function setup_logging!(toml::Dict, output_path="output_path")
         if isnothing(log_file)
             log_file = "log.txt"
         end
-        log_file = abspath(joinpath(output_path, log_file))
+        log_file = abspath(joinpath(config[output_path], log_file))
     elseif !isnothing(log_file)
         @warn "Logging set to false, so log file $log_file will not be written. Please add `logger=true` to your [ global ] config"
     end
