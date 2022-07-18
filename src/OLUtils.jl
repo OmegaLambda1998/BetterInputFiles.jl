@@ -2,6 +2,7 @@ module OLUtils
 
 # External Packages
 using TOML
+using DataStructures
 using LoggingExtras
 
 # Internal Packages
@@ -9,13 +10,13 @@ using LoggingExtras
 # Exports
 export setup_global!
 
-default_paths = Dict(
+default_paths = OrderedDict(
     # Name => relative, default
     "base_path" => ("toml_path", ""),
     "output_path" => ("base_path", "Output")
 )
 
-function setup_paths!(toml::Dict, paths::Dict=default_paths)
+function setup_paths!(toml::Dict, paths::OrderedDict)
     config = get(toml, "global", Dict())
     for (path_name, (relative_name, default)) in paths
         relative = config[relative_name]
@@ -34,7 +35,7 @@ function setup_paths!(toml::Dict, paths::Dict=default_paths)
     toml["global"] = config
 end
 
-function setup_logging!(toml::Dict, output_path="output_path")
+function setup_logging!(toml::Dict, output_path)
     config = get(toml, "global", Dict())
     output = config[output_path]
     logging = get(config, "logging", true)
@@ -46,7 +47,7 @@ function setup_logging!(toml::Dict, output_path="output_path")
         end
         log_file = abspath(joinpath(config[output_path], log_file))
     elseif !isnothing(log_file)
-        @warn "Logging set to false, so log file $log_file will not be written. Please add `logger=true` to your [ global ] config"
+        @warn "Logging set to false, so log file $log_file will not be written. Please add `logging=true` to your [ global ] config"
     end
     config["log_file"] = log_file
     toml["global"] = config
@@ -82,8 +83,11 @@ function setup_logger(log_file::AbstractString, verbose::Bool)
     @info "Logging to $log_file"
 end
 
-function setup_global!(toml::Dict, verbose::Bool, paths::Dict=default_paths, output_path="output_path")
-    setup_paths!(toml, paths)
+function setup_global!(toml::Dict, verbose::Bool, paths=nothing, output_path="output_path")
+    if !isnothing(paths)
+        merge!(default_paths, paths)
+    end
+    setup_paths!(toml, default_paths)
     setup_logging!(toml, output_path)
     config = toml["global"]
     if config["logging"]
