@@ -3,6 +3,8 @@ using Test
 
 @testset verbose = true "OLUtils.jl" begin
 
+    clean = (length(ARGS) > 0) && (ARGS[1] in ["-c", "--clean"])
+
     @testset "Global setup" begin
         # Test defaults
         correct_default_toml = Dict{Any, Any}(
@@ -19,9 +21,10 @@ using Test
         @test default_toml == correct_default_toml
         # Test that output path was created
         @test ispath(default_toml["global"]["output_path"])
-        # Cleanup output path created by test
-        rm(default_toml["global"]["output_path"], recursive=true, force=true)
-        @test !ispath(default_toml["global"]["output_path"])
+        if clean
+            # Cleanup output path created by test
+            rm(default_toml["global"]["output_path"], recursive=true, force=true)
+        end
 
         # Test logging gets created
         correct_logging_toml = Dict{Any, Any}(
@@ -40,9 +43,10 @@ using Test
         @test ispath(logging_toml["global"]["output_path"])
         # Test that log file was created
         @test ispath(logging_toml["global"]["log_file"])
-        # Cleanup output path created by test
-        rm(logging_toml["global"]["output_path"], recursive=true, force=true)
-        @test !ispath(logging_toml["global"]["output_path"])
+        if clean
+            # Cleanup output path created by test
+            rm(logging_toml["global"]["output_path"], recursive=true, force=true)
+        end
 
         # Test custom paths 
         correct_paths_toml = Dict{Any, Any}(
@@ -64,14 +68,14 @@ using Test
         @test paths_toml == correct_paths_toml
         # Test that output path was created
         @test ispath(paths_toml["global"]["output_path"])
-        # Cleanup output path created by test
-        rm(paths_toml["global"]["output_path"], recursive=true, force=true)
-        @test !ispath(paths_toml["global"]["output_path"])
-        # Cleanup input path created by test
-        rm(paths_toml["global"]["input_path"], recursive=true, force=true)
-        @test !ispath(paths_toml["global"]["input_path"])
-
-
-
+        if clean
+            # Cleanup output path created by test
+            rm(paths_toml["global"]["output_path"], recursive=true, force=true)
+            @test !ispath(paths_toml["global"]["output_path"])
+            # Cleanup input path created by test
+            rm(paths_toml["global"]["input_path"], recursive=true, force=true)
+            @test !ispath(paths_toml["global"]["input_path"])
+        end
     end
+
 end
