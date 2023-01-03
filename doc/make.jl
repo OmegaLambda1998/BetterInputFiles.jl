@@ -17,5 +17,5 @@ makedocs(
 )
 
 deploydocs(
-    rep = "github.com/OmegaLambda1998/OLUtils.git"
+    repo = "github.com/OmegaLambda1998/OLUtils.git"
 )
