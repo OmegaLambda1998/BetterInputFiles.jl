@@ -11,12 +11,12 @@ using LoggingExtras
 export setup_global!
 
 """
-    default_paths::OrderedDict{String, Tuple{String, AbstractString}}
+    default_paths::OrderedDict{String, Tuple{String, String}}
 
 The default paths which will be expanded into absolute paths and used throughout the project.
 
 ```
-default_paths::OrderedDict{String, Tuple{String, AbstractString}} = OrderedDict{String, Tuple{String, AbstractString}}(
+default_paths::OrderedDict{String, Tuple{String, String}} = OrderedDict{String, Tuple{String, String}}(
     # Name => relative, default
     "base_path" => ("toml_path", ""),
     "output_path" => ("base_path", "Output")
@@ -26,7 +26,7 @@ default_paths::OrderedDict{String, Tuple{String, AbstractString}} = OrderedDict{
 This dictionary maps `("path_name" => ("relative_name", "default_path"))`, where `"path_name"` is a human readable name for the path, `"relative_name"` is the name of the path which `"path_name"` is relative to, and `"default_path"` is the default value for the path (either absolute or relative). If `"path_name"` already exists inside `toml["global"]`, then that path will be used either as is (if an absolute path) or relative to `"relative_name"`, otherwise the `"default_path"` will be used
 
 """
-default_paths::OrderedDict{String, Tuple{String, AbstractString}} = OrderedDict{String, Tuple{String, AbstractString}}(
+default_paths::OrderedDict{String, Tuple{String, String}} = OrderedDict{String, Tuple{String, String}}(
     # Name => relative, default
     "base_path" => ("toml_path", ""),
     "output_path" => ("base_path", "Output")
@@ -34,7 +34,7 @@ default_paths::OrderedDict{String, Tuple{String, AbstractString}} = OrderedDict{
 
 
 """
-    setup_paths!(toml::Dict, paths::OrderedDict{String, Tuple{String, AbstractString}}; mkdirs::Bool=true)
+    setup_paths!(toml::Dict, paths::OrderedDict{String, Tuple{String, String}}; mkdirs::Bool=true)
 
 Helper function which sets up paths, expanding relative paths and ensuring all interim directories exist
 
@@ -45,7 +45,7 @@ Helper function which sets up paths, expanding relative paths and ensuring all i
 
 See also [`setup_global!`](@ref)
 """
-function setup_paths!(toml::Dict{Any, Any}, paths::OrderedDict{String, Tuple{String, AbstractString}}; mkdirs::Bool=true)
+function setup_paths!(toml::Dict{Any, Any}, paths::OrderedDict{String, Tuple{String, String}}; mkdirs::Bool=true)
     config = get(toml, "global", Dict())
     for (path_name, (relative_name, default)) in paths
         # Get which `path_name` to set this path relative to
@@ -145,7 +145,7 @@ function setup_logger(log_file::AbstractString, verbose::Bool)
 end
 
 """
-    setup_global!(toml::Dict, toml_path::AbstractString, verbose::Bool, paths::OrderedDict{String, Tuple{String, AbstractString}}=OrderedDict{String, Tuple{String, AbstractString}}(), log_path::String="output_path"; test::Bool=false)
+    setup_global!(toml::Dict, toml_path::AbstractString, verbose::Bool, paths::OrderedDict{String, Tuple{String, String}}=OrderedDict{String, Tuple{String, String}}(), log_path::String="output_path"; test::Bool=false)
 
 Setup the `"global"` information of toml, including paths and logging.
 
@@ -171,7 +171,7 @@ println(toml)
 Dict{Any, Any}("global" => Dict{Any, Any}("toml_path" => "/path/to/input", "logging" => false, "base_path" => "/path/to/input/", "log_file" => "/path/to/input/Output/log.txt", "output_path" => "/path/to/input/Output"))
 ```
 """
-function setup_global!(toml::Dict{Any, Any}, toml_path::AbstractString, verbose::Bool, paths::OrderedDict{String, Tuple{String, AbstractString}}=OrderedDict{String, Tuple{String, AbstractString}}(), log_path::String="output_path"; test::Bool=false)
+function setup_global!(toml::Dict{Any, Any}, toml_path::AbstractString, verbose::Bool, paths::OrderedDict{String, Tuple{String, String}}=OrderedDict{String, Tuple{String, String}}(), log_path::String="output_path"; test::Bool=false)
     if !("global" in keys(toml))
         toml["global"] = Dict()
     end
