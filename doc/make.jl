@@ -11,7 +11,6 @@ makedocs(
         "Setup functions" => "setup.md",
     ],
     format = Documenter.HTML(
-        prettyurls = false,
         assets = ["assets/favicon.ico"],
     )
 )
