@@ -39,13 +39,13 @@ default_paths::OrderedDict{String, Tuple{String, String}} = OrderedDict{String, 
 Helper function which sets up paths, expanding relative paths and ensuring all interim directories exist
 
 # Arguments
-- `toml::Dict{Any, Any}`: The toml file we are modifying. This assumes that the toml already has a `"global"` key with value `Dict{Any, Any}("toml_path"=>"/path/to/input"), where `"toml_path"` is the path to the `.toml` file
+- `toml::Dict`: The toml file we are modifying. This assumes that the toml already has a `"global"` key with value `Dict{Any, Any}("toml_path"=>"/path/to/input"), where `"toml_path"` is the path to the `.toml` file
 - `paths::OrderedDict{String, Tuple{String, String}}`: Paths to expand. `paths` will be merged with the following `default_paths`, with `paths` taking preference. See [`default_paths`](@ref) for a the syntax of `paths`
 - `mkdirs::Bool`: Whether to actually make the directories or not, useful when simply wanting to populate `toml` without changing anything on the disk
 
 See also [`setup_global!`](@ref)
 """
-function setup_paths!(toml::Dict{Any, Any}, paths::OrderedDict{String, Tuple{String, String}}; mkdirs::Bool=true)
+function setup_paths!(toml::Dict, paths::OrderedDict{String, Tuple{String, String}}; mkdirs::Bool=true)
     config = get(toml, "global", Dict())
     for (path_name, (relative_name, default)) in paths
         # Get which `path_name` to set this path relative to
@@ -72,19 +72,19 @@ end
 
 
 """
-    setup_logging!(toml::Dict{Any, Any}, output_path::String="output_path"; log::Bool=true)
+    setup_logging!(toml::Dict, output_path::String="output_path"; log::Bool=true)
 
 Helper function which sets up log level, log files, etc...
 Assumes that [`setup_paths!`](@ref) has already been run on `toml`
 
 # Arguments
-- `toml::Dict{Any, Any}`: The toml file we are modifying. This assumes that the toml already has a `"global"` key with value `Dict{Any, Any}("toml_path"=>"/path/to/input"), where `"toml_path"` is the path to the `.toml` file
+- `toml::Dict`: The toml file we are modifying. This assumes that the toml already has a `"global"` key with value `Dict{Any, Any}("toml_path"=>"/path/to/input"), where `"toml_path"` is the path to the `.toml` file
 - `output_path::String`: The `"path_name"` of the output directory where log files should be written. See [`default_paths`](@ref) for more details
 - `do_log::Bool`: Whether to actually log anything, useful when simply wanting to populate `toml` without changing anything on the disk
 
 See also [`setup_global!`](@ref)
 """
-function setup_logging!(toml::Dict{Any, Any}, output_path::String="output_path"; do_log::Bool=true)
+function setup_logging!(toml::Dict, output_path::String="output_path"; do_log::Bool=true)
     config = get(toml, "global", Dict())
     if !(output_path in keys(config))
         throw(ErrorException("Output path $output_path not defined"))
@@ -150,7 +150,7 @@ end
 Setup the `"global"` information of toml, including paths and logging.
 
 # Arguments
-- `toml::Dict{Any, Any}`: The toml file loaded into a `Dict`
+- `toml::Dict`: The toml file loaded into a `Dict`
 - `toml_path::AbstractString`: The path to the input `.toml` file (from which `toml` is loaded)
 - `verbose::Bool`: Whether or not to display `@debug` calls
 - `paths::OrderedDict{String, Tuple{String, String}}`: Paths to expand. `paths` will be merged with the following `default_paths`, with `paths` taking preference. See [`default_paths`](@ref) for a the syntax of `paths`
@@ -171,7 +171,7 @@ println(toml)
 Dict{Any, Any}("global" => Dict{Any, Any}("toml_path" => "/path/to/input", "logging" => false, "base_path" => "/path/to/input/", "log_file" => "/path/to/input/Output/log.txt", "output_path" => "/path/to/input/Output"))
 ```
 """
-function setup_global!(toml::Dict{Any, Any}, toml_path::AbstractString, verbose::Bool, paths::OrderedDict{String, Tuple{String, String}}=OrderedDict{String, Tuple{String, String}}(), log_path::String="output_path"; test::Bool=false)
+function setup_global!(toml::Dict, toml_path::AbstractString, verbose::Bool, paths::OrderedDict{String, Tuple{String, String}}=OrderedDict{String, Tuple{String, String}}(), log_path::String="output_path"; test::Bool=false)
     if !("global" in keys(toml))
         toml["global"] = Dict()
     end
