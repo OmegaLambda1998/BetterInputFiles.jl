@@ -1,13 +1,13 @@
 using Documenter
-using OLUtils
+using InputFiles
 
-DocMeta.setdocmeta!(OLUtils, :DocTestSetup, :(using OLUtils); recursive=true)
+DocMeta.setdocmeta!(InputFiles, :DocTestSetup, :(using InputFiles); recursive=true)
 
 makedocs(
-    sitename="OLUtils Documentation",
-    modules = [OLUtils, OLUtils.SetupModule],
+    sitename="InputFiles Documentation",
+    modules = [InputFiles, InputFiles.SetupModule],
     pages = [
-        "OLUtils" => "index.md",
+        "InputFiles" => "index.md",
         "Setup functions" => "setup.md",
     ],
     format = Documenter.HTML(
@@ -16,5 +16,5 @@ makedocs(
 )
 
 deploydocs(
-    repo = "github.com/OmegaLambda1998/OLUtils.git"
+    repo = "github.com/OmegaLambda1998/InputFiles.jl.git"
 )

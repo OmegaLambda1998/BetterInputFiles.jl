@@ -1,8 +1,8 @@
-using OLUtils
+using InputFiles 
 using Test
 using DataStructures
 
-@testset verbose = true "OLUtils.jl" begin
+@testset verbose = true "InputFiles.jl" begin
 
     clean = (length(ARGS) > 0) && (ARGS[1] in ["-c", "--clean"])
     toml_path = joinpath(@__DIR__, "dummy.toml")
