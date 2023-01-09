@@ -26,7 +26,7 @@ default_paths::OrderedDict{String, Tuple{String, String}} = OrderedDict{String, 
 This dictionary maps `("path_name" => ("relative_name", "default_path"))`, where `"path_name"` is a human readable name for the path, `"relative_name"` is the name of the path which `"path_name"` is relative to, and `"default_path"` is the default value for the path (either absolute or relative). If `"path_name"` already exists inside `toml["global"]`, then that path will be used either as is (if an absolute path) or relative to `"relative_name"`, otherwise the `"default_path"` will be used
 
 """
-default_paths::OrderedDict{String, Tuple{String, String}} = OrderedDict{String, Tuple{String, String}}(
+const default_paths::OrderedDict{String, Tuple{String, String}} = OrderedDict{String, Tuple{String, String}}(
     # Name => relative, default
     "base_path" => ("toml_path", ""),
     "output_path" => ("base_path", "Output")
@@ -177,9 +177,9 @@ function setup_global!(toml::Dict, toml_path::AbstractString, verbose::Bool, pat
     end
     toml["global"]["toml_path"] = dirname(abspath(toml_path))
     # Merge `paths` with `default_paths`, giving preference to `paths`
-    merge!(default_paths, paths)
+    input_paths = merge(default_paths, paths)
     # If it is a test, you should not mkdirs
-    setup_paths!(toml, default_paths; mkdirs=!test)
+    setup_paths!(toml, input_paths; mkdirs=!test)
     # If it is a test, you should not log
     setup_logging!(toml, log_path; do_log=!test)
     config = toml["global"]

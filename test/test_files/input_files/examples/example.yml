@@ -1,0 +1,23 @@
+# Test default
+default:
+  example: "Example"
+
+
+# Test update_case
+key1:
+  a: 1
+  b: 2
+
+# Test include
+<include includes/include.yaml>
+
+# Test env vars
+env_var:
+  a: <$A>
+  b: <$B>
+
+# Test interpolations
+interpolation:
+  a: 1
+  b: <%a>
+  c: <%example>
