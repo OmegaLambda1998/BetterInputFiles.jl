@@ -17,7 +17,8 @@
         blank_inputs = readdir(joinpath(input_file_dir, "blank"), join=true)
         for input in blank_inputs
             if any(ext -> occursin(ext, input), ["json", "jsn"])
-                @test load_raw_input(input) == "{\n}\n"
+                # Deal with windows carriage returns
+                @test replace(load_raw_input(input), "\r\n" => "\n") == "{\n}\n"
             else
                 @test load_raw_input(input) == ""
             end
@@ -33,7 +34,7 @@
             else
                 correct_raw = "# Created on $(today())\n# Original file: $input\n\n"
             end
-            @test preprocess_input(input) == correct_raw
+            @test replace(preprocess_input(input), "\r\n" => "\n") == correct_raw
         end
     end
 
