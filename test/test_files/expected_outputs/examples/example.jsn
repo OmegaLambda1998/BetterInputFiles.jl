@@ -6,14 +6,17 @@
         "a": 1,
         "b": 2
     },
-    <include includes/includes.json>
+    "key2": {
+        "a": 1,
+        "b": 2
+    },
     "env_var": {
-        "a": <$A>,
-        "b": <$B>
+        "a": 1,
+        "b": 2 
     },
     "interpolation": {
         "a": 1,
-        "b": <%a>,
-        "c": <%example>
+        "b": 1,
+        "c": "Example"
     }
 }

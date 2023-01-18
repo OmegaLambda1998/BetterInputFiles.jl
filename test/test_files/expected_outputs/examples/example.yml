@@ -1,0 +1,25 @@
+# Test default
+default:
+  example: "Example"
+
+
+# Test update_case
+key1:
+  a: 1
+  b: 2
+
+# Test include
+key2:
+  a: 1
+  b: 2
+
+# Test env vars
+env_var:
+  a: 1 
+  b: 2 
+
+# Test interpolations
+interpolation:
+  a: 1
+  b: 1 
+  c: "Example" 

@@ -5,8 +5,8 @@
     "key1": {
         "a": 1,
         "b": 2
-    }
-    <include includes/includes.yaml>
+    },
+    <include includes/includes.json>
     "env_var": {
         "a": <$A>,
         "b": <$B>
