@@ -13,6 +13,8 @@ using YAML
 export load_input
 export load_inputfile
 export load_raw_inputfile
+export save_input
+export postprocess_input
 export preprocess_input 
 export get_InputExt
 export InputExt
@@ -229,6 +231,115 @@ function load_input(raw_input::String, ext::YAMLExt)
 end
 
 """
+    save_input(input::Dict, log_path::String, input_path::AbstractString, ext::InputExt)
+
+Save `input` to the same directory that logging is being saved.
+
+# Arguments
+- `input::Dict`: Input to save
+- `log_path::String`: Directory to save input to
+- `input_path::AbstractString`: Original path of input
+- `ext::InputExt`: Extension specifier
+"""
+function save_input(input::Dict, log_path::String, input_path::AbstractString, ext::InputExt)
+    config = input["GLOBAL"]
+    output_path = get(config, uppercase(log_path), nothing)
+    if isnothing(output_path)
+        throw(ErrorException("Unknown output path: $log_path"))
+    end
+    name = splitdir(input_path)[end]
+    output_file = joinpath(output_path, name)
+    save_input(input, output_file, ext)
+end
+
+"""
+    save_input(input::Dict, output_file::AbstractString, ext::TOMLExt)
+
+Save `input` to `output_file`, as a `.toml` file
+
+# Arguments
+- `input::Dict`: Input to save
+- `output_file::AbstractString`: Path to save
+- `ext::TOMLExt`: Extension specifier
+"""
+function save_input(input::Dict, output_file::AbstractString, ext::TOMLExt)
+    open(output_file, "w") do io
+        TOML.print(io, input)
+    end
+end
+
+"""
+    save_input(input::Dict, output_file::AbstractString, ext::JSONExt)
+
+Save `input` to `output_file`, as a `.json` file
+
+# Arguments
+- `input::Dict`: Input to save
+- `output_file::AbstractString`: Path to save
+- `ext::JSONExt`: Extension specifier
+"""
+function save_input(input::Dict, output_file::AbstractString, ext::JSONExt)
+    open(output_file, "w") do io
+        JSON.print(io, input, 4)
+    end
+end
+
+"""
+    save_input(input::Dict, output_file::AbstractString, ext::YAMLExt)
+
+Save `input` to `output_file`, as a `.yaml` file
+
+# Arguments
+- `input::Dict`: Input to save
+- `output_file::AbstractString`: Path to save
+- `ext::YAMLExt`: Extension specifier
+"""
+function save_input(input::Dict, output_file::AbstractString, ext::YAMLExt)
+    YAML.write_file(output_file, input)
+end
+
+"""
+    postprocess_input(input::Dict)
+
+Run postprocessing on input
+
+# Arguments
+- `input::Dict`: Input to postprocess
+"""
+function postprocess_input(input::Dict)
+    input = update_case(input)
+    return input
+end
+
+"""
+    update_case(input::Dict)
+
+Recursively Ensure every key in `input` is uppercase
+
+# Arguments
+- `input::Dict`: The input to update
+"""
+function postprocess_input(input::Dict)
+    rtn = Dict()
+    for (key, value) in input
+        rtn[uppercase(key)] = postprocess_input(value)
+    end
+    return rtn
+end
+
+"""
+    postprocess_input(input::Any)
+
+Stopping condition of [`postprocess_input(::Dict)`], when a value is reached
+
+# Arguments
+- `input::Any`: Return input
+"""
+function postprocess_input(input::Any)
+    return input
+end
+
+"""
     preprocess_input(input_path::AbstractString)
 
 Automatically detect extension type of `input_path`, then preprocess the input.
@@ -238,11 +349,12 @@ Automatically detect extension type of `input_path`, then preprocess the input.
 
 Will error if the extension of `input_path` is not part of [`exts`](@ref). If you wish to manually specify the extension, use `[preprocess_input(::AbstractString, ::String)]`(@ref). After the extension is found, will run [`preprocess_input(::AbstractString, ::String)]`(@ref) 
 """
-function preprocess_input(input_path::AbstractString)
+function preprocess_input(input_path::AbstractString, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
+
     # Get extension without leading dot
     ext = splitext(input_path)[end][2:end] 
     input_ext = get_InputExt(ext)()
-    return preprocess_input(input_path, input_ext)
+    return preprocess_input(input_path, input_ext, custom_metadata)
 end
 
 """
@@ -256,9 +368,10 @@ Specify the extension type of `input_path` manually, then preprocess the ipnut.
 
 If the extension of `input_path` is not defined by `InputFiles`, but acts like a defined extension, you can specify which extension to use via this function, which will then run [`preprocess_input(::AbstractString, ::String)`](@ref)
 """
-function preprocess_input(input_path::AbstractString, ext::String)
+function preprocess_input(input_path::AbstractString, ext::String, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
+
     input_ext = get_InputExt(ext)()
-    return preprocess_input(input_path, input_ext)
+    return preprocess_input(input_path, input_ext, custom_metadata)
 end
 
 """
@@ -272,15 +385,14 @@ Preprocess the input path before running setup.
 
 Preprocessing includes adding metadata comments at the top-level, including other files, inserting environmental variables, propegating default values, interpolating values, and ensuring all variables are upper-case.
 """
-function preprocess_input(input_path::AbstractString, ext::InputExt)
+function preprocess_input(input_path::AbstractString, ext::InputExt, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
+
     raw = load_raw_inputfile(input_path)
-    raw = add_metadata(raw, ext, input_path)
+    raw = add_metadata(raw, ext, input_path, custom_metadata)
     raw = process_includes(raw, input_path) 
     raw = process_env_vars(raw)
-    #process_default!(raw, ext)
-    #process_interpolation!(raw, ext)
-    #update_case!(raw, ext)
-    return raw, ext
+    input = process_interpolation(raw, ext)
+    return input, ext
 end
 
 """
@@ -293,10 +405,15 @@ Add metadata comment to top-level of .toml file
 - `ext::TOMLExt`: Extension of input file
 - `input_path::AbstractString`: Path to input file
 
-Runs [`add_metadata(::String, ::String, ::AbstractString)`](@ref)
+Adds a new "METADATA" key, containing the date of creation and `input_path` 
 """
-function add_metadata(raw::String, ext::TOMLExt, input_path::AbstractString)
-    return add_metadata(raw, "#", input_path)
+function add_metadata(raw::String, ext::TOMLExt, input_path::AbstractString, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
+    date = today()
+    metadata = "[ METADATA ]\n    DATE = \"$date\"\n    ORIGINAL = \"$input_path\"\n"
+    for (key, value) in custom_metadata
+        metadata *= "    $(uppercase(key)) = \"$value\""
+    end
+    return metadata * "\n" * raw
 end
 
 """
@@ -309,10 +426,15 @@ Add metadata comment to top-level of .yaml file
 - `ext::YAMLExt`: Extension of input file
 - `input_path::AbstractString`: Path to input file
 
-Runs [`add_metadata(::String, ::String, ::AbstractString)`](@ref)
+Adds a new "METADATA" key, containing the date of creation and `input_path` 
 """
-function add_metadata(raw::String, ext::YAMLExt, input_path::AbstractString)
-    return add_metadata(raw, "#", input_path)
+function add_metadata(raw::String, ext::YAMLExt, input_path::AbstractString, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
+    date = today()
+    metadata = "METADATA:\n    DATE: \"$date\"\n    ORIGINAL: \"$input_path\"\n"
+    for (key, value) in custom_metadata
+        metadata *= "    $(uppercase(key)): \"$value\""
+    end
+    return metadata * "\n" * raw
 end
 
 """
@@ -325,33 +447,21 @@ Add metadata comment to top-level of .json file
 - `ext::JSONExt`: Extension of input file
 - `input_path::AbstractString`: Path to input file
 
-Adds new "METADATA" key, and places the original json file into a "JSON" key.
-Adds the date of creation and `input_path`
+Adds a new "METADATA" key, containing the date of creation and `input_path` 
 """
-function add_metadata(raw::String, ext::JSONExt, input_path::AbstractString)
+function add_metadata(raw::String, ext::JSONExt, input_path::AbstractString, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
+
     date = today()
-    raw = "\"JSON\": " * raw * "\n}"
-    metadata = "{\n\"METADATA\": {\n    \"Date\": \"$date\",\n    \"Original\": \"$input_path\"\n},\n"
-    return metadata * raw
-end
-
-"""
-    add_metadata(raw::String, comment::String, input_path::AbstractString)
-
-Add comment string to input file
-
-# Arguments
-- `raw::String`: Raw text of input file
-- `comment::String`: Comment character
-- `input_path::AbstractString`: Path to input file
-
-Adds the date of creation and `input_path` comment
-"""
-function add_metadata(raw::String, comment::String, input_path::AbstractString)
-    date = today()
-    date_str = "$comment Created on $date\n"
-    file_str = "$comment Original file: $input_path\n\n"
-    return date_str * file_str * raw
+    m_str = "\n        \"DATE\": \"$date\",\n        \"ORIGINAL\": \"$input_path\"\n"
+    for (key, value) in custom_metadata
+        metadata *= "        \"$(uppercase(key))\": \"$value\""
+    end
+    metadata = "    \"METADATA\": {$m_str    }"
+    # Be careful of blank json files
+    if strip(raw[2:end]) == "}"
+        return "{\n" * metadata * "\n}"
+    end
+    return "{\n" * metadata * ",\n" * raw[2:end]
 end
 
 """
@@ -391,7 +501,7 @@ Interpolate environmental variables into `raw`, specified via `<\$ENV>`
 # Arguments
 - `raw::String`: Raw file to process
 """
-function process_env_vars(raw)
+function process_env_vars(raw::String)
     reg = r"<\$(.*)>"
     ms = eachmatch(reg, raw)
     for m in ms
@@ -404,6 +514,68 @@ function process_env_vars(raw)
         end
     end
     return raw
+end
+
+"""
+"""
+function process_interpolation(raw::String, ext::InputExt)
+    reg = r"<%(.*)>"
+    ms = eachmatch(reg, raw)
+    for m in ms
+        for key in m.captures
+            raw = replace(raw, "<%$key>" => "\"<%$key>\"")
+        end
+    end
+    input = load_input(raw, ext)
+    input = propegate_defaults(input)
+    input = process_interpolation(input)
+    return input
+end
+
+"""
+"""
+function process_interpolation(input::Dict)
+    reg = r"<%(.*)>"
+    for (key, value) in input
+        if typeof(value) <: Dict
+            input[key] = process_interpolation(value)
+        elseif typeof(value) <: AbstractString
+            m = match(reg, value)
+            if !isnothing(m)
+                for k in m.captures
+                    if k in keys(input)
+                        input[key] = input[k]
+                    else
+                        throw(ErrorException("Can not interpolate $k, not found in $(keys(input))"))
+                    end
+                end
+            end
+        end
+    end
+    return input
+end
+
+"""
+"""
+function propegate_defaults(input::Dict)
+    # Get default values, checking both `default` and `DEFAULT`
+    default = Dict()
+    if "default" in keys(input)
+        default = input["default"]
+    end
+    default = get(input, "DEFAULT", default)
+    for (k, v) in default
+        for (key, value) in input
+            if key != "METADATA"
+                if typeof(value) <: Dict
+                    if !(k in keys(value))
+                        input[key][k] = v
+                    end
+                end
+            end
+        end
+    end
+    return input
 end
 
 end

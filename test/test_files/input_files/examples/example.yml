@@ -9,7 +9,7 @@ key1:
   b: 2
 
 # Test include
-<include includes/include.yaml>
+<include includes/includes.yaml>
 
 # Test env vars
 env_var:

@@ -25,13 +25,15 @@ const ext_dict::Dict{String, String} = Dict(
         expected_dir = joinpath(expected_outputs, dir)
         @testset "$dir" begin
             for file in readdir(input_dir)
-                ext = splitext(file)[end][2:end] 
-                if ext in keys(ext_dict)
-                    ext = ext_dict[ext]
+                if isfile(joinpath(input_dir, file))
+                    ext = splitext(file)[end][2:end] 
+                    if ext in keys(ext_dict)
+                        ext = ext_dict[ext]
+                    end
+                    input = setup_input(joinpath(input_dir, file), ext, false)
+                    expected_output = InputFiles.load_inputfile(joinpath(expected_dir, file), ext)
+                    @test input == expected_output
                 end
-                input = setup_input(joinpath(input_dir, file), ext, false; test=true)
-                expected_output = InputFiles.load_inputfile(joinpath(expected_dir, file), ext)
-                @test input == expected_output
             end
         end
     end

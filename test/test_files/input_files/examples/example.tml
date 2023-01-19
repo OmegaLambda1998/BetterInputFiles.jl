@@ -8,7 +8,7 @@ a = 1
 b = 2
 
 # Test include
-<include includes/include.toml>
+<include includes/includes.toml>
 
 # Test env vars
 [ env_var ]
