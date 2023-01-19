@@ -230,6 +230,7 @@ Read .json file in to Dict
 - `ext::JSONExt`: Extension specifier
 """
 function load_input(raw_input::String, ext::JSONExt)
+    @show raw_input
     return fix_dict_type(JSON.parse(raw_input))
 end
 
