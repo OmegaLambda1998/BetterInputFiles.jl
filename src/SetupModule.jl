@@ -62,7 +62,7 @@ function setup_paths!(input::Dict, paths::OrderedDict{String, Tuple{String, Stri
         if !isdir(path)
             mkpath(path)
         end
-        config[path_name] = path
+        config[path_name] = escape_string(path)
     end
     input["global"] = config
 end
