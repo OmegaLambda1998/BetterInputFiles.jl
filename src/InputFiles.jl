@@ -25,7 +25,7 @@ function setup_input(input_path::AbstractString, ext::String, verbose::Bool, pat
 end
 
 function setup_input(input_path::AbstractString, ext::InputExt, verbose::Bool, paths::OrderedDict{String, Tuple{String, String}}=OrderedDict{String, Tuple{String, String}}(), log_path::String="output_path")
-    input, ext = preprocess_input(input_path, ext)
+    input::Dict{String, Any}, ext = preprocess_input(input_path, ext)
     setup_global!(input, input_path, verbose, paths, log_path)
     input = postprocess_input(input)
     save_input(input, log_path, input_path, ext)

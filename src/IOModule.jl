@@ -241,7 +241,7 @@ Save `input` to the same directory that logging is being saved.
 - `input_path::AbstractString`: Original path of input
 - `ext::InputExt`: Extension specifier
 """
-function save_input(input::Dict, log_path::String, input_path::AbstractString, ext::InputExt)
+function save_input(input::Dict{String, Any}, log_path::String, input_path::AbstractString, ext::InputExt)
     config = input["GLOBAL"]
     output_path = get(config, uppercase(log_path), nothing)
     if isnothing(output_path)
@@ -262,7 +262,7 @@ Save `input` to `output_file`, as a `.toml` file
 - `output_file::AbstractString`: Path to save
 - `ext::TOMLExt`: Extension specifier
 """
-function save_input(input::Dict, output_file::AbstractString, ext::TOMLExt)
+function save_input(input::Dict{String, Any}, output_file::AbstractString, ext::TOMLExt)
     open(output_file, "w") do io
         TOML.print(io, input)
     end
@@ -278,7 +278,7 @@ Save `input` to `output_file`, as a `.json` file
 - `output_file::AbstractString`: Path to save
 - `ext::JSONExt`: Extension specifier
 """
-function save_input(input::Dict, output_file::AbstractString, ext::JSONExt)
+function save_input(input::Dict{String, Any}, output_file::AbstractString, ext::JSONExt)
     open(output_file, "w") do io
         JSON.print(io, input, 4)
     end
@@ -294,7 +294,7 @@ Save `input` to `output_file`, as a `.yaml` file
 - `output_file::AbstractString`: Path to save
 - `ext::YAMLExt`: Extension specifier
 """
-function save_input(input::Dict, output_file::AbstractString, ext::YAMLExt)
+function save_input(input::Dict{String, Any}, output_file::AbstractString, ext::YAMLExt)
     YAML.write_file(output_file, input)
 end
 
@@ -320,7 +320,7 @@ Recursively Ensure every key in `input` is uppercase
 - `input::Dict`: The input to update
 """
 function postprocess_input(input::Dict)
-    rtn = Dict()
+    rtn = Dict{String, Any}()
     for (key, value) in input
         rtn[uppercase(key)] = postprocess_input(value)
     end
@@ -526,7 +526,7 @@ function process_interpolation(raw::String, ext::InputExt)
             raw = replace(raw, "<%$key>" => "\"<%$key>\"")
         end
     end
-    input = load_input(raw, ext)
+    input::Dict{String, Any} = load_input(raw, ext)
     input = propegate_defaults(input)
     input = process_interpolation(input)
     return input
@@ -557,7 +557,7 @@ end
 
 """
 """
-function propegate_defaults(input::Dict)
+function propegate_defaults(input::Dict{String, Any})
     # Get default values, checking both `default` and `DEFAULT`
     default = Dict()
     if "default" in keys(input)
