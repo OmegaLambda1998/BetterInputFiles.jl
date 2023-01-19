@@ -1,0 +1,19 @@
+{
+    "default": {
+        "example": "Example"
+    },
+    "key1": {
+        "a": 1,
+        "b": 2
+    },
+    <include includes/includes.json>
+    "env_var": {
+        "a": <$A>,
+        "b": <$B>
+    },
+    "interpolation": {
+        "a": 1,
+        "b": <%a>,
+        "c": <%example>
+    }
+}

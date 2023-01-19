@@ -1,0 +1,32 @@
+{
+    "INTERPOLATION": {
+        "EXAMPLE": "Example",
+        "B": 1,
+        "A": 1,
+        "C": "Example"
+    },
+    "KEY1": {
+        "EXAMPLE": "Example",
+        "B": 2,
+        "A": 1
+    },
+    "GLOBAL": {
+        "BASE_PATH": "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/",
+        "INPUT_PATH": "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples",
+        "LOG_FILE": "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/Output/log.txt",
+        "LOGGING": true,
+        "OUTPUT_PATH": "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/Output"
+    },
+    "DEFAULT": {
+        "EXAMPLE": "Example"
+    },
+    "METADATA": {
+        "ORIGINAL": "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/example.jsn",
+        "DATE": "2023-01-19"
+    },
+    "ENV_VAR": {
+        "EXAMPLE": "Example",
+        "B": 2,
+        "A": 1
+    }
+}
