@@ -33,8 +33,8 @@ const ext_dict::Dict{String, String} = Dict(
                     input = setup_input(joinpath(input_dir, file), ext, false)
                     expected_output = InputFiles.load_inputfile(joinpath(expected_dir, file), ext)
                     # Deal with github's paths
-                    expected_output["METADATA"] = input["METADATA"]
-                    expected_output["GLOBAL"] = input["GLOBAL"]
+                    input["METADATA"] = expected_output["METADATA"]
+                    input["GLOBAL"] = expected_output["GLOBAL"]
                     @test input == expected_output
                 end
             end
