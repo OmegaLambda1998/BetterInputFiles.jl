@@ -111,6 +111,8 @@ function fix_dict_type(input::Dict)
     for (key, value) in input
         if typeof(value) <: Dict
             rtn[key] = fix_dict_type(value)
+        elseif typeof(value) <: AbstractString
+            rtn[key] = escape_string(value)
         else
             rtn[key] = value
         end
@@ -230,7 +232,6 @@ Read .json file in to Dict
 - `ext::JSONExt`: Extension specifier
 """
 function load_input(raw_input::String, ext::JSONExt)
-    @show raw_input
     return fix_dict_type(JSON.parse(raw_input))
 end
 
