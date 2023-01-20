@@ -149,23 +149,11 @@ Setup the `"global"` information of input, including paths and logging.
 - `input::Dict`: The input file loaded into a `Dict`
 - `input_path::AbstractString`: The path to the input `.input` file (from which `input` is loaded)
 - `verbose::Bool`: Whether or not to display `@debug` calls
-- `paths::OrderedDict{String, Tuple{String, String}}`: Paths to expand. `paths` will be merged with the following `default_paths`, with `paths` taking preference. See [`default_paths`](@ref) for a the syntax of `paths`
-- `output_path::String`: The `"path_name"` of the directory where logging should output
+- `paths::OrderedDict{String, Tuple{String, String}}`: Paths to expand. `paths` will be merged with the following `default_paths`, with `paths` taking preference. See [`default_paths`](@ref) for the syntax of `paths`
+- `log_path::String`: The `"path_name"` of the directory where logging should output
 - `test::Bool`: Whether this run is a test or not. This will decide whether to actually create directories, or log anything
 
 See also [`setup_paths!`](@ref), and [`setup_logging!`](@ref)
-
-# Example
-```jldoctest
-input = Dict()
-input_path = "/path/to/input/file.input"
-setup_global!(input, input_path, false; test=true)
-println(input)
-
-# output
-
-Dict{Any, Any}("global" => Dict{Any, Any}("input_path" => "/path/to/input", "logging" => false, "base_path" => "/path/to/input/", "log_file" => "/path/to/input/Output/log.txt", "output_path" => "/path/to/input/Output"))
-```
 """
 function setup_global!(input::Dict, input_path::AbstractString, verbose::Bool, paths::OrderedDict{String, Tuple{String, String}}=OrderedDict{String, Tuple{String, String}}(), log_path::String="output_path")
     if !("global" in keys(input))

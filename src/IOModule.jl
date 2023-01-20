@@ -342,10 +342,10 @@ Recursively Ensure every key in `input` is uppercase
 # Arguments
 - `input::Dict`: The input to update
 """
-function postprocess_input(input::Dict)
+function update_case(input::Dict)
     rtn = Dict{String, Any}()
     for (key, value) in input
-        rtn[uppercase(key)] = postprocess_input(value)
+        rtn[uppercase(key)] = update_case(value)
     end
     return rtn
 end
@@ -353,12 +353,12 @@ end
 """
     postprocess_input(input::Any)
 
-Stopping condition of [`postprocess_input(::Dict)`], when a value is reached
+Stopping condition of [`postprocess_input(::Dict)`](@ref), when a value is reached
 
 # Arguments
 - `input::Any`: Return input
 """
-function postprocess_input(input::Any)
+function update_case(input::Any)
     return input
 end
 
@@ -477,7 +477,7 @@ function add_metadata(raw::String, ext::JSONExt, input_path::AbstractString, cus
     date = today()
     m_str = "\n        \"DATE\": \"$date\",\n        \"ORIGINAL\": \"$input_path\"\n"
     for (key, value) in custom_metadata
-        metadata *= "        \"$(uppercase(key))\": \"$value\""
+        m_str *= ",\n        \"$(uppercase(key))\": \"$value\""
     end
     metadata = "    \"METADATA\": {$m_str    }"
     # Be careful of blank json files
@@ -540,6 +540,13 @@ function process_env_vars(raw::String)
 end
 
 """
+    process_interpolation(raw::String, ext::InputExt)
+
+Given the raw string for an input, load the input ([`load_input`](@ref)), propegate default values ([`propegate_defaults`](@ref)) and process all interpolations ([`process_interpolation(::Dict)`](@ref))
+
+# Arguments
+- `raw::String`: The raw input file to process
+- `ext::InputExt`: Extension specifier
 """
 function process_interpolation(raw::String, ext::InputExt)
     reg = r"<%(.*)>"
@@ -556,6 +563,12 @@ function process_interpolation(raw::String, ext::InputExt)
 end
 
 """
+    process_interpolation(input::Dict)
+
+Process interpolations for `input`
+
+# Arguments
+- `input::Dict` The input to process
 """
 function process_interpolation(input::Dict)
     reg = r"<%(.*)>"
@@ -579,6 +592,12 @@ function process_interpolation(input::Dict)
 end
 
 """
+    propegate_defaults(input::Dict{String, Any})
+
+Propegate `key => value` pairs in `DEFAULT` to every base sub-dictionary, except `METADATA`.
+
+# Arguments
+- `input::Dict{String, Any}`: The input to propegate. If not `DEFAULT` dictionary is found, this function will do nothing
 """
 function propegate_defaults(input::Dict{String, Any})
     # Get default values, checking both `default` and `DEFAULT`

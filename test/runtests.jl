@@ -15,6 +15,8 @@ const ext_dict::Dict{String, String} = Dict(
 
     ENV["A"] = 1
     ENV["B"] = 2
+
+    custom_metadata = [("A", "B")]
     
     test_files = joinpath(@__DIR__, "test_files")
     input_files = joinpath(test_files, "input_files")
@@ -30,7 +32,7 @@ const ext_dict::Dict{String, String} = Dict(
                     if ext in keys(ext_dict)
                         ext = ext_dict[ext]
                     end
-                    input = setup_input(joinpath(input_dir, file), ext, false)
+                    input = setup_input(joinpath(input_dir, file), false, ext; custom_metadata=custom_metadata)
                     expected_output = InputFiles.load_inputfile(joinpath(expected_dir, file), ext)
                     # Deal with github's paths
                     input["METADATA"] = expected_output["METADATA"]

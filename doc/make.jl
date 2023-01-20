@@ -1,14 +1,16 @@
 using Documenter
+push!(LOAD_PATH, "../src/")
 using InputFiles
 
 DocMeta.setdocmeta!(InputFiles, :DocTestSetup, :(using InputFiles); recursive=true)
 
 makedocs(
     sitename="InputFiles Documentation",
-    modules = [InputFiles, InputFiles.SetupModule],
+    modules = [InputFiles, InputFiles.SetupModule, InputFiles.IOModule],
     pages = [
         "InputFiles" => "index.md",
-        "Setup functions" => "setup.md",
+        "Advanced Usage" => "advanced.md",
+        "API" => "api.md"
     ],
     format = Documenter.HTML(
         assets = ["assets/favicon.ico"],
