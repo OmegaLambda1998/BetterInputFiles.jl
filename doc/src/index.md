@@ -1,5 +1,7 @@
 # InputFiles.jl Documentation
 
+[InputFiles.jl](https://github.com/OmegaLambda1998/InputFiles.jl)
+
 Provides consistent methods to load in input files, such as `.toml`, `.yaml`, and `.json` files. Also extends the functionality of these files, via pre-processing, and post-processing.
 
 Functionality provided includes:
