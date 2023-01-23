@@ -1,5 +1,6 @@
 [![Tests](https://github.com/OmegaLambda1998/InputFiles.jl/actions/workflows/test.yml/badge.svg)](https://github.com/OmegaLambda1998/InputFiles.jl/actions/workflows/test.yml)
-[![Documentation](https://github.com/OmegaLambda1998/InputFiles.jl/actions/workflows/pages/pages-build-deployment/badge.svg)](https://omegalambda.com.au/InputFiles.jl/)
+[![Documentation](https://github.com/OmegaLambda1998/InputFiles.jl/actions/workflows/documentation.yml/badge.svg)](https://omegalambda.com.au/InputFiles.jl/)
+
 Provides consistent methods to load in input files, such as `.toml`, `.yaml`, and `.json` files. Also extends the functionality of these files, via pre-processing, and post-processing.
 
 Functionality provided includes:
