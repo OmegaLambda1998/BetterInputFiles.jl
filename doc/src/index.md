@@ -1,6 +1,6 @@
 # InputFiles.jl Documentation
 
-Provides consistent methods to load in input files, such as `.toml`, `.yaml`, and `.json` files. Also extends the functionality of these files, via pre-processing, post-processing, and macros.
+Provides consistent methods to load in input files, such as `.toml`, `.yaml`, and `.json` files. Also extends the functionality of these files, via pre-processing, and post-processing.
 
 Functionality provided includes:
 - Automatically add Metadata to your input
