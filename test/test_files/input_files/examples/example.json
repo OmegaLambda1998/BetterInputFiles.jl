@@ -8,9 +8,10 @@
         "subdict": {
             "x": 3,
             "y": 4,
-            "subsubdict": {
-                "z": 5
-            }
+            "subsubdict": [
+                {"z": 5},
+                {"z": 6}
+            ]
         }
     },
     <include includes/includes.json>

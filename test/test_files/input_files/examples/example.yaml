@@ -11,7 +11,8 @@ key1:
     x: 3
     y: 4
     subsubdict:
-      z: 5
+      - z: 5
+      - z: 6
 
 # Test include
 <include includes/includes.yaml>

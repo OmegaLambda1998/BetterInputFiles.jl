@@ -9,9 +9,14 @@
         "A": 1,
         "SUBDICT": {
             "Y": 4,
-            "SUBSUBDICT": {
-                "Z": 5
-            },
+            "SUBSUBDICT": [
+                {
+                    "Z": 5
+                },
+                {
+                    "Z": 6
+                }
+            ],
             "X": 3
         }
     },

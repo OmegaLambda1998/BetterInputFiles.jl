@@ -8,7 +8,8 @@ KEY1:
   SUBDICT:
     Y: 4
     SUBSUBDICT:
-      Z: 5
+      - Z: 5
+      - Z: 6
     X: 3
 GLOBAL:
   BASE_PATH: "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/"

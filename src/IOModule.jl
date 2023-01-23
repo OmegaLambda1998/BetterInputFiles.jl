@@ -337,7 +337,7 @@ end
 """
     update_case(input::Dict)
 
-Recursively Ensure every key in `input` is uppercase
+Recursively ensure every key in `input` is uppercase
 
 # Arguments
 - `input::Dict`: The input to update
@@ -351,7 +351,19 @@ function update_case(input::Dict)
 end
 
 """
-    postprocess_input(input::Any)
+    update_case(input::AbstractArray)
+
+Updated the case of every element in `input`.
+
+# Arguments
+- `input::AbstractArray`: Input to process 
+"""
+function update_case(input::AbstractArray)
+    return update_case.(input) 
+end
+
+"""
+    update_case(input::Any)
 
 Stopping condition of [`postprocess_input(::Dict)`](@ref), when a value is reached
 

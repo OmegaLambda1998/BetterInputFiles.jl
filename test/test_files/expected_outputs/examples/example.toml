@@ -11,8 +11,10 @@ A = 1
     Y = 4
     X = 3
 
-        [KEY1.SUBDICT.SUBSUBDICT]
+        [[KEY1.SUBDICT.SUBSUBDICT]]
         Z = 5
+        [[KEY1.SUBDICT.SUBSUBDICT]]
+        Z = 6
 
 [GLOBAL]
 BASE_PATH = "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/"
