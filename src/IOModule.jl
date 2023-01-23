@@ -542,7 +542,7 @@ end
 """
     process_interpolation(raw::String, ext::InputExt)
 
-Given the raw string for an input, load the input ([`load_input`](@ref)), propegate default values ([`propegate_defaults`](@ref)) and process all interpolations ([`process_interpolation(::Dict)`](@ref))
+Given the raw string for an input, load the input ([`load_input`](@ref)), and process all interpolations ([`process_interpolation(::Dict)`](@ref)), respecting defaults
 
 # Arguments
 - `raw::String`: The raw input file to process
@@ -557,8 +557,13 @@ function process_interpolation(raw::String, ext::InputExt)
         end
     end
     input::Dict{String, Any} = load_input(raw, ext)
-    input = propegate_defaults(input)
-    input = process_interpolation(input)
+    # Get default values, checking both `default` and `DEFAULT`
+    default = Dict()
+    if "default" in keys(input)
+        default = input["default"]
+    end
+    default = get(input, "DEFAULT", default)
+    input = process_interpolation(input, default)
     return input
 end
 
@@ -570,48 +575,21 @@ Process interpolations for `input`
 # Arguments
 - `input::Dict` The input to process
 """
-function process_interpolation(input::Dict)
+function process_interpolation(input::Dict, default::Dict)
     reg = r"<%(.*)>"
     for (key, value) in input
         if typeof(value) <: Dict
-            input[key] = process_interpolation(value)
+            input[key] = process_interpolation(value, default)
         elseif typeof(value) <: AbstractString
             m = match(reg, value)
             if !isnothing(m)
                 for k in m.captures
                     if k in keys(input)
                         input[key] = input[k]
+                    elseif k in keys(default) 
+                        input[key] = default[k]
                     else
-                        throw(ErrorException("Can not interpolate $k, not found in $(keys(input))"))
-                    end
-                end
-            end
-        end
-    end
-    return input
-end
-
-"""
-    propegate_defaults(input::Dict{String, Any})
-
-Propegate `key => value` pairs in `DEFAULT` to every base sub-dictionary, except `METADATA`.
-
-# Arguments
-- `input::Dict{String, Any}`: The input to propegate. If not `DEFAULT` dictionary is found, this function will do nothing
-"""
-function propegate_defaults(input::Dict{String, Any})
-    # Get default values, checking both `default` and `DEFAULT`
-    default = Dict()
-    if "default" in keys(input)
-        default = input["default"]
-    end
-    default = get(input, "DEFAULT", default)
-    for (k, v) in default
-        for (key, value) in input
-            if key != "METADATA"
-                if typeof(value) <: Dict
-                    if !(k in keys(value))
-                        input[key][k] = v
+                        throw(ErrorException("Can not interpolate $k, not found in $(keys(input)), nor in $(keys(default))"))
                     end
                 end
             end

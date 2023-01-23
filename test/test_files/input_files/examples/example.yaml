@@ -7,6 +7,11 @@ default:
 key1:
   a: 1
   b: 2
+  subdict:
+    x: 3
+    y: 4
+    subsubdict:
+      z: 5
 
 # Test include
 <include includes/includes.yaml>

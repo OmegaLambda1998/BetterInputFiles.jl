@@ -6,6 +6,11 @@ example = "Example"
 [ key1 ]
 a = 1
 b = 2
+    [ key1.subdict ]
+    x = 3
+    y = 4
+    [ key1.subdict.subsubdict ]
+        z = 5
 
 # Test include
 <include includes/includes.toml>

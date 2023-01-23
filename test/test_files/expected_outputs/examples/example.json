@@ -1,14 +1,19 @@
 {
     "INTERPOLATION": {
-        "EXAMPLE": "Example",
         "B": 1,
         "A": 1,
         "C": "Example"
     },
     "KEY1": {
-        "EXAMPLE": "Example",
         "B": 2,
-        "A": 1
+        "A": 1,
+        "SUBDICT": {
+            "Y": 4,
+            "SUBSUBDICT": {
+                "Z": 5
+            },
+            "X": 3
+        }
     },
     "GLOBAL": {
         "BASE_PATH": "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/",
@@ -22,10 +27,10 @@
     },
     "METADATA": {
         "ORIGINAL": "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/example.json",
-        "DATE": "2023-01-19"
+        "A": "B",
+        "DATE": "2023-01-23"
     },
     "ENV_VAR": {
-        "EXAMPLE": "Example",
         "B": 2,
         "A": 1
     }
