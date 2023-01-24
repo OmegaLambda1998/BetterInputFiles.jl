@@ -4,6 +4,9 @@ module InputFiles
 using DataStructures
 
 # Internal Packages
+include("MacroModule.jl")
+using .MacroModule
+
 include("IOModule.jl")
 using .IOModule
 
@@ -12,6 +15,7 @@ using .SetupModule
 
 # Exports
 export setup_input
+export @get
 
 """
     setup_input(input_path::AbstractString, verbose::Bool; paths::OrderedDict{String, Tuple{String, String}}=OrderedDict{String, Tuple{String, String}}(), log_path::String="output_path", custom_metadata::Vector{Tuple{String, String}}=Vector{Tuple{String, String}}())
