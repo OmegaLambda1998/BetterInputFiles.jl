@@ -19,6 +19,26 @@ Modules = [InputFiles]
 Private = false
 ```
 
+## Macro Functions
+
+```@meta
+CurrentModule = InputFiles.MacroModule
+```
+
+### Public objects 
+
+```@autodocs
+Modules = [MacroModule]
+Private = false
+```
+
+### Private objects
+
+```@autodocs
+Modules = [MacroModule]
+Public = false
+```
+
 ## Setup Functions
 
 ```@meta
@@ -38,6 +58,7 @@ Private = false
 Modules = [SetupModule]
 Public = false
 ```
+
 ## IO Functions
 
 ```@meta

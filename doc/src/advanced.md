@@ -164,3 +164,37 @@ Sometimes you will have an input file which acts like a TOML, YAML, or JSON file
 ```julia
 input = setup_input("/path/to/input.example", verbose, "toml")
 ```
+
+## Macros
+
+`InputFiles` also provides a number of macros, mostly focused at making reading from and writing to the input file easier.
+
+### `@get`
+
+The most basic macro is [`@get`](@ref). This macro will take any expression matching `dictionary[key]`, `getindex(dictionary, key)`, or `get(dictionary, key, default)`, and case-insensitively get the value of `key` in `dictionary`. This assumes that every key in `dictionary` is capitalised, but that is guaranteed by `InputFiles` on setup, and you can make use of [`@set!`](@ref) to ensure that stays true throughout.
+
+```julia
+d = Dict("A" => 1, "B" => 2)
+d["A"] == @get d["a"]
+d["A"] == @get getindex(d, "a")
+```
+
+### `@set!`
+
+[`@set!`](@ref) matches `dictionary[key] = value`, or `setindex!(dictionary, value, key)` and will case-insensitively set `value` to `key` in `dictionary`, ensuring `key` ends up capitalised.
+
+```julia
+d = Dict{String, Int64}()
+@set! d["a"] = 1
+@set! d["B"] = 2
+@set! setindex!(d, 3, "c")
+@set! setindex!(d, 4, "D")
+
+d = Dict{String, Int64} with 4 entries:
+  "A" => 1
+  "B" => 2
+  "C" => 3
+  "D" => 4
+```
+
+```

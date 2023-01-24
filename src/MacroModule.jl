@@ -111,7 +111,6 @@ Case-insensitive get `key` from `dictionary`
 - `dictionary::Dict{S, V}`: Dictionary to get `key` from
 - `key::S`: `key` to get from `dictionary`
 """
-
 function getter(dictionary::Dict{S, V}, key::S) where {S <: AbstractString, V}
     upper_key = uppercase("$(key)")
     return getindex(dictionary, upper_key)
@@ -139,6 +138,14 @@ Case-insensitive get value from input file. Matches dictionary[key], getindex(di
 
 # Arguments
 - `ex::Expr`: Expression to parse
+
+# Example
+
+```
+d = Dict("A" => 1, "B" => 2)
+d["A"] == @get d["a"]
+d["A"] == @get getindex(d, "a")
+```
 """
 macro get(ex::Expr)
     try
@@ -227,6 +234,23 @@ Case-insensitive set key to value in dictionary. Matches dictionary[key] = value
 
 # Arguments
 - `ex::Expr`: Expression to parse
+
+
+# Example
+
+```
+d = Dict{String, Int64}()
+@set! d["a"] = 1
+@set! d["B"] = 2
+@set! setindex!(d, 3, "c")
+@set! setindex!(d, 4, "D")
+
+d = Dict{String, Int64} with 4 entries:
+  "A" => 1
+  "B" => 2
+  "C" => 3
+  "D" => 4
+```
 """
 macro set!(ex::Expr)
     try

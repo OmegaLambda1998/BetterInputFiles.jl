@@ -6,7 +6,7 @@ DocMeta.setdocmeta!(InputFiles, :DocTestSetup, :(using InputFiles); recursive=tr
 
 makedocs(
     sitename="InputFiles Documentation",
-    modules = [InputFiles, InputFiles.SetupModule, InputFiles.IOModule],
+    modules = [InputFiles, InputFiles.MacroModule, InputFiles.SetupModule, InputFiles.IOModule],
     pages = [
         "InputFiles" => "index.md",
         "Advanced Usage" => "advanced.md",
