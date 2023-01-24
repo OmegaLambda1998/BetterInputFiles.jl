@@ -2,13 +2,13 @@ module MacroModule
 
 # External Packages
 import MLStyle: @match
-import MacroTools: postwalk
+import MacroTools: postwalk, prewalk
 
 # Internal Packages
 
 # Exports
 export @get
-export @set
+export @set!
 
 """
 Taken from https://thautwarm.github.io/MLStyle.jl/stable/tutorials/capture/ on 24/01/2023
@@ -50,7 +50,7 @@ function getter(expr::Expr)
                     error("`@get dictionary[key]` requires dictionary<:Dict{S, V} where {S <: AbstractString, V}, not $dictionary_type")
                 end
                 local key_type = typeof($(esc(key)))
-                if !(key_type <: AbstractString)
+                if !(key_type <: expected_key_type)
                     error("`@get dictionary[key]` key has type $key_type, but requires type <:$expected_key_type")
                 end
                 local upper_key = uppercase("$($(esc(key)))")
@@ -67,7 +67,7 @@ function getter(expr::Expr)
                     error("`@get getindex(dictionary, key)` requires dictionary<:Dict{S, V} where {S <: AbstractString, V}, not $dictionary_type")
                 end
                 local key_type = typeof($(esc(key)))
-                if !(key_type <: AbstractString)
+                if !(key_type <: expected_key_type)
                     error("`@get getindex(dictionary, key)` key has type $key_type, but requires type <:$expected_key_type")
                 end
                 local upper_key = uppercase("$($(esc(key)))")
@@ -85,7 +85,7 @@ function getter(expr::Expr)
                     error("`@get get(dictionary, key, default)` requires dictionary<:Dict{S, V} where {S <: AbstractString, V}, not $dictionary_type")
                 end
                 local key_type = typeof($(esc(key)))
-                if !(key_type <: AbstractString)
+                if !(key_type <: expected_key_type)
                     error("`@get get(dictionary, key, default)` key has type $key_type, but requires type <:$expected_key_type")
                 end
                 local default_type = typeof($(esc(default)))
@@ -145,6 +145,67 @@ macro get(ex::Expr)
         return getter(ex)
     catch e
         error("`$(ex)` does not match dictionary[key], getindex(dictionary, key), or get(dictionary, key, default)")
+    end
+end
+
+function setter!(expr::Expr)
+    postwalk(expr) do ex
+        # Matches dictionary[key] = value
+        @capture $(dictionary)[$(key)] = $(value) ex begin
+            return quote
+                local dictionary_type = typeof($(esc(dictionary)))
+                local expected_key_type = dictionary_type.parameters[1]
+                local expected_value_type = dictionary_type.parameters[2]
+                if !(dictionary_type <: Dict{S, V} where {S <: AbstractString, V})
+                    error("`@set! dictionary[key] = value` requires dictionary<:Dict{S, V} where {S <: AbstractString, V}, not $dictionary_type")
+                end
+                local key_type = typeof($(esc(key)))
+                if !(key_type <: expected_key_type)
+                    error("`@set! dictionary[key] = value` key has type $key_type, but requires type <:$expected_key_type")
+                end
+                local value_type = typeof($(esc(value)))
+                if !(value_type <: expected_value_type)
+                    error("`@set! dictionary[key] = value` value has type $value_type, but requires type <:$expected_value_type")
+                end
+                setter!($(esc(dictionary)), $(esc(value)), $(esc(key)))
+            end
+        end
+
+        @capture setindex!($(dictionary), $(value), $(key)) ex begin
+            return quote
+                local dictionary_type = typeof($(esc(dictionary)))
+                local expected_key_type = dictionary_type.parameters[1]
+                local expected_value_type = dictionary_type.parameters[2]
+                if !(dictionary_type <: Dict{S, V} where {S <: AbstractString, V})
+                    error("`@set! setindex!(dictionary, value, key)` requires dictionary<:Dict{S, V} where {S <: AbstractString, V}, not $dictionary_type")
+                end
+                local key_type = typeof($(esc(key)))
+                if !(key_type <: expected_key_type)
+                    error("`@set! setindex!(dictionary, value, key)` key has type $key_type, but requires type <:$expected_key_type")
+                end
+                local value_type = typeof($(esc(value)))
+                if !(value_type <: expected_value_type)
+                    error("`@set! setindex!(dictionary, value, key)` value has type $value_type, but requires type <:$expected_value_type")
+                end
+                setter!($(esc(dictionary)), $(esc(value)), $(esc(key)))
+            end
+        end
+
+        # No matches
+        return ex
+    end
+end
+
+function setter!(dictionary::Dict{S, V}, value::V, key::S) where {S <: AbstractString, V}
+    upper_key = uppercase("$(key)")
+    setindex!(dictionary, value, upper_key)
+end
+
+macro set!(ex::Expr)
+    try
+        setter!(ex)
+    catch e
+        error("`$(ex)` does not match dictionary[key] = value, or setindex!(dictionary, value, key)")
     end
 end
 
