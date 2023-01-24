@@ -148,6 +148,14 @@ macro get(ex::Expr)
     end
 end
 
+"""
+    setter!(expr::Expr)
+
+Recursively parse `expr` for dictionary[key], or setindex!(dictionary, value, key) expressions. Then case-insensitive set `key` to `value` in `dictionary`
+
+# Arguments
+- `expr::Expr`: Expression to parse
+"""
 function setter!(expr::Expr)
     postwalk(expr) do ex
         # Matches dictionary[key] = value
@@ -171,6 +179,7 @@ function setter!(expr::Expr)
             end
         end
 
+        # Matches setindex(dictionary, value, key)
         @capture setindex!($(dictionary), $(value), $(key)) ex begin
             return quote
                 local dictionary_type = typeof($(esc(dictionary)))
@@ -196,11 +205,29 @@ function setter!(expr::Expr)
     end
 end
 
+"""
+    setter!(dictionary::Dict{S, V}, value::V, key::S) where {S <: AbstractString, V}
+
+Case-insensitive set `key` to `value` in `dictionary`
+
+# Arguments
+- `dictionary::Dict{S, V}`: Dictionary top set `key` to
+- `value::V`: Value to set
+- `key::S`: Key to set `value` to
+"""
 function setter!(dictionary::Dict{S, V}, value::V, key::S) where {S <: AbstractString, V}
     upper_key = uppercase("$(key)")
     setindex!(dictionary, value, upper_key)
 end
 
+"""
+    @set!(ex::Expr)
+
+Case-insensitive set key to value in dictionary. Matches dictionary[key] = value, and setindex!(dictionary, value, key)
+
+# Arguments
+- `ex::Expr`: Expression to parse
+"""
 macro set!(ex::Expr)
     try
         setter!(ex)
