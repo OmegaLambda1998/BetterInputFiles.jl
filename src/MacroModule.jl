@@ -9,6 +9,8 @@ import MacroTools: postwalk, prewalk
 # Exports
 export @get
 export @set!
+export @required
+export @restricted
 
 """
 Taken from https://thautwarm.github.io/MLStyle.jl/stable/tutorials/capture/ on 24/01/2023
@@ -257,6 +259,41 @@ macro set!(ex::Expr)
         setter!(ex)
     catch e
         error("`$(ex)` does not match dictionary[key] = value, or setindex!(dictionary, value, key)")
+    end
+end
+
+"""
+    @required(ex::Expr, msg::String)
+
+Case-insensitive get value from input file. Matches dictionary[key], getindex(dictionary, key), and get(dictionary, key, default). If `key` does not exist, throw Error with `msg`
+"""
+macro required(ex::Expr, msg::Union{String, Symbol}="Key missing from input file")
+    return quote
+        try
+            @get $(esc(ex))
+        catch e
+            if isa(e, KeyError)
+                error($(esc(msg)))
+            else
+                throw(e)
+            end
+        end
+    end
+end
+
+"""
+    @restricted(ex::Expr, func::Union{Expr, Symbol}, msg::Union{String, Symbol})
+
+Case-insensitive get value from input file. Matches dictionary[key], getindex(dictionary, key), an get(dictionary, key, default). If the value does not pass `func`. throw Error with `msg`
+"""
+macro restricted(ex::Expr, func::Union{Expr, Symbol}, msg::Union{String, Symbol}="Did not pass restriction")
+    return quote
+        local val = @required $(esc(ex))
+        if $(esc(func))(val)
+            return val
+        else
+            error($(esc(msg)))
+        end
     end
 end
 

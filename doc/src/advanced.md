@@ -197,4 +197,40 @@ d = Dict{String, Int64} with 4 entries:
   "D" => 4
 ```
 
+### `@required`
+Similar to [`@get`](@ref), except [`@required`](@ref) allows you to provide a message if the `key` is not found. If no `msg` is provided, the default message `"Key missing from input file"` will be used.
+
+```julia
+d = Dict("A" => 1, "B" => 2)
+a = @required d["a"]
+b = @required d["b"] "You haven't included \"b\"`"
+
+# Will throw error
+c = @required d["c"]
+# Error: Key missing from input file
+
+c = @required d["c"] "Missing C!"
+# Error: Missing C!
+```
+
+### `@restricted`
+Similar to [`@get`](@ref), except [`@restricted`](@ref) allows you to ensure the value recieved from the input file passes `func`, throwing an error if it does not. If no `msg` is provided, the default message `"Did not pass restriction"` will be thrown. You may need to wrap an `@restricted` call in parentheses in order to correctly pass `func`
+
+```julia
+d = Dict("A" => 1, "B" => 2, "C" => 5)
+
+function f1(x)
+    return x < 5
+end
+
+f2(x) = x < 5
+
+a = (@restricted d["a"] f1)
+# a -> 1
+
+b = (@restricted get(d, "b", 0) f2)
+# b -> 2
+
+c = (@restricted getindex(d, "c") (x -> x < 5))
+# Error("Did not pass restriction")
 ```
