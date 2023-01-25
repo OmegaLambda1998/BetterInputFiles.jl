@@ -5,6 +5,7 @@ using DataStructures
 using LoggingExtras
 
 # Internal Packages
+using ..MacroModule
 using ..IOModule
 
 # Exports
@@ -45,15 +46,13 @@ Helper function which sets up paths, expanding relative paths and ensuring all i
 See also [`setup_global!`](@ref)
 """
 function setup_paths!(input::Dict, paths::OrderedDict{String, Tuple{String, String}})
-    config = get(input, "global", Dict())
+    config = @get get(input, "global", Dict{String, Any}())
     for (path_name, (relative_name, default)) in paths
         # Get which `path_name` to set this path relative to
         # Requires that `relative_name` already exists in `config`
-        if !(relative_name in keys(config))
-            throw(ErrorException("Relative path $relative_name for path $path_name doesn't exist. Make sure you have defined your paths in the correct order!"))
-        end
-        relative = config[relative_name] 
-        path = get(config, path_name, default)
+        error_msg = "Relative path $relative_name for path $path_name doesn't exist. Make sure you have defined your paths in the correct order!"
+        relative = @required config[relative_name] error_msg
+        path = @get get(config, path_name, default)
         # If `path` is absolute, ignore `relative`, otherwise make `path` relative to `relative`
         if !isabspath(path)
             path = joinpath(relative, path)
@@ -62,11 +61,10 @@ function setup_paths!(input::Dict, paths::OrderedDict{String, Tuple{String, Stri
         if !isdir(path)
             mkpath(path)
         end
-        config[path_name] = escape_string(path)
+        @set! config[path_name] = escape_string(path)
     end
-    input["global"] = config
+    @set! input["global"] = config
 end
-
 
 """
     setup_logging!(input::Dict, output_path::String="output_path"; log::Bool=true)
@@ -81,18 +79,16 @@ Assumes that [`setup_paths!`](@ref) has already been run on `input`
 See also [`setup_global!`](@ref)
 """
 function setup_logging!(input::Dict, output_path::String="output_path")
-    config = get(input, "global", Dict())
-    if !(output_path in keys(config))
-        throw(ErrorException("Output path $output_path not defined"))
-    end
-    output = config[output_path]
-    logging = get(config, "logging", true)
-    config["logging"] = logging
+    config = @get get(input, "global", Dict{String, Any}())
+    error_msg = "Output path $output_path not defined"
+    output = @required config[output_path] error_msg
+    logging = @get get(config, "logging", true)
+    @set! config["logging"] = logging
     # Setup logfile
-    log_file = get(config, "log_file", "log.txt")
+    log_file = @get get(config, "log_file", "log.txt")
     log_file = abspath(joinpath(output, log_file))
-    config["log_file"] = log_file
-    input["global"] = config
+    @set! config["log_file"] = log_file
+    @set! input["global"] = config
 end
 
 """
@@ -156,17 +152,17 @@ Setup the `"global"` information of input, including paths and logging.
 See also [`setup_paths!`](@ref), and [`setup_logging!`](@ref)
 """
 function setup_global!(input::Dict, input_path::AbstractString, verbose::Bool, paths::OrderedDict{String, Tuple{String, String}}=OrderedDict{String, Tuple{String, String}}(), log_path::String="output_path")
-    if !("global" in keys(input))
-        input["global"] = Dict()
+    if !("GLOBAL" in keys(input))
+        @set! input["global"] = Dict{String, Any}()
     end
-    input["global"]["input_path"] = dirname(abspath(input_path))
+    global_config = @get input["global"]
+    @set! global_config["input_path"] = dirname(abspath(input_path))
     # Merge `paths` with `default_paths`, giving preference to `paths`
     input_paths = merge(default_paths, paths)
     setup_paths!(input, input_paths)
     setup_logging!(input, log_path)
-    config = input["global"]
-    if config["logging"]
-        setup_logger(config["log_file"], verbose)
+    if @get global_config["logging"]
+        setup_logger(global_config["LOG_FILE"], verbose)
     end
     return input
 end

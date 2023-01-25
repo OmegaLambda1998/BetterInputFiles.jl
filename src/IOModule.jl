@@ -8,6 +8,7 @@ using JSON
 using YAML
 
 # Internal Packages
+using ..MacroModule
 
 # Exports
 export load_input
@@ -265,8 +266,8 @@ Save `input` to the same directory that logging is being saved.
 - `ext::InputExt`: Extension specifier
 """
 function save_input(input::Dict{String, Any}, log_path::String, input_path::AbstractString, ext::InputExt)
-    config = input["GLOBAL"]
-    output_path = get(config, uppercase(log_path), nothing)
+    config = @get input["global"]
+    output_path = @get get(config, log_path, nothing)
     if isnothing(output_path)
         throw(ErrorException("Unknown output path: $log_path"))
     end
@@ -345,7 +346,7 @@ Recursively ensure every key in `input` is uppercase
 function update_case(input::Dict)
     rtn = Dict{String, Any}()
     for (key, value) in input
-        rtn[uppercase(key)] = update_case(value)
+        @set! rtn[key] = update_case(value)
     end
     return rtn
 end
