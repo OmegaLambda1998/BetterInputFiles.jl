@@ -20,6 +20,9 @@
             "X": 3
         }
     },
+    "DEFAULT": {
+        "EXAMPLE": "Example"
+    },
     "GLOBAL": {
         "BASE_PATH": "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/",
         "INPUT_PATH": "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples",
@@ -27,13 +30,10 @@
         "LOGGING": true,
         "OUTPUT_PATH": "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/Output"
     },
-    "DEFAULT": {
-        "EXAMPLE": "Example"
-    },
     "METADATA": {
         "ORIGINAL": "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/example.jsn",
         "A": "B",
-        "DATE": "2023-01-23"
+        "DATE": "2023-01-26"
     },
     "ENV_VAR": {
         "B": 2,

@@ -18,18 +18,18 @@ The default paths which will be expanded into absolute paths and used throughout
 ```
 default_paths::OrderedDict{String, Tuple{String, String}} = OrderedDict{String, Tuple{String, String}}(
     # Name => relative, default
-    "base_path" => ("input_path", ""),
-    "output_path" => ("base_path", "Output")
+    "BASE_PATH" => ("INPUT_PATH", ""),
+    "OUTPUT_PATH" => ("BASE_PATH", "Output")
 )
 ```
 
-This dictionary maps `("path_name" => ("relative_name", "default_path"))`, where `"path_name"` is a human readable name for the path, `"relative_name"` is the name of the path which `"path_name"` is relative to, and `"default_path"` is the default value for the path (either absolute or relative). If `"path_name"` already exists inside `input["global"]`, then that path will be used either as is (if an absolute path) or relative to `"relative_name"`, otherwise the `"default_path"` will be used
+This dictionary maps `("path_name" => ("relative_name", "default_path"))`, where `"path_name"` is a human readable name for the path, `"relative_name"` is the name of the path which `"path_name"` is relative to, and `"default_path"` is the default value for the path (either absolute or relative). If `"path_name"` already exists inside `input["GLOBAL"]`, then that path will be used either as is (if an absolute path) or relative to `"relative_name"`, otherwise the `"default_path"` will be used
 
 """
 const default_paths::OrderedDict{String, Tuple{String, String}} = OrderedDict{String, Tuple{String, String}}(
     # Name => relative, default
-    "base_path" => ("input_path", ""),
-    "output_path" => ("base_path", "Output")
+    "BASE_PATH" => ("INPUT_PATH", ""),
+    "OUTPUT_PATH" => ("BASE_PATH", "Output")
 )
 
 
@@ -39,21 +39,21 @@ const default_paths::OrderedDict{String, Tuple{String, String}} = OrderedDict{St
 Helper function which sets up paths, expanding relative paths and ensuring all interim directories exist
 
 # Arguments
-- `input::Dict`: The input file we are modifying. This assumes that the input already has a `"global"` key with value `Dict{Any, Any}("input_path"=>"/path/to/input"), where `"input_path"` is the path to the `input` file
+- `input::Dict`: The input file we are modifying. This assumes that the input already has a `"GLOBAL"` key with value `Dict{String, Any}("INPUT_PATH"=>"/path/to/input"), where `"INPUT_PATH"` is the path to the `input` file
 - `paths::OrderedDict{String, Tuple{String, String}}`: Paths to expand. `paths` will be merged with the following `default_paths`, with `paths` taking preference. See [`default_paths`](@ref) for a the syntax of `paths`
 
 See also [`setup_global!`](@ref)
 """
 function setup_paths!(input::Dict, paths::OrderedDict{String, Tuple{String, String}})
-    config = get(input, "global", Dict())
+    config = get(input, "GLOBAL", Dict())
     for (path_name, (relative_name, default)) in paths
         # Get which `path_name` to set this path relative to
         # Requires that `relative_name` already exists in `config`
-        if !(relative_name in keys(config))
+        if !(uppercase(relative_name) in keys(config))
             throw(ErrorException("Relative path $relative_name for path $path_name doesn't exist. Make sure you have defined your paths in the correct order!"))
         end
-        relative = config[relative_name] 
-        path = get(config, path_name, default)
+        relative = config[uppercase(relative_name)] 
+        path = get(config, uppercase(path_name), default)
         # If `path` is absolute, ignore `relative`, otherwise make `path` relative to `relative`
         if !isabspath(path)
             path = joinpath(relative, path)
@@ -62,37 +62,37 @@ function setup_paths!(input::Dict, paths::OrderedDict{String, Tuple{String, Stri
         if !isdir(path)
             mkpath(path)
         end
-        config[path_name] = escape_string(path)
+        config[uppercase(path_name)] = escape_string(path)
     end
-    input["global"] = config
+    input["GLOBAL"] = config
 end
 
 
 """
-    setup_logging!(input::Dict, output_path::String="output_path"; log::Bool=true)
+    setup_logging!(input::Dict, output_path::String="OUTPUT_PATH"; log::Bool=true)
 
 Helper function which sets up log level, log files, etc...
 Assumes that [`setup_paths!`](@ref) has already been run on `input`
 
 # Arguments
-- `input::Dict`: The input file we are modifying. This assumes that the input already has a `"global"` key with value `Dict{Any, Any}("input_path"=>"/path/to/input"), where `"input_path"` is the path to the input file
+- `input::Dict`: The input file we are modifying. This assumes that the input already has a `"GLOBAL"` key with value `Dict{String, Any}("INPUT_PATH"=>"/path/to/input"), where `"INPUT_PATH"` is the path to the input file
 - `output_path::String`: The `"path_name"` of the output directory where log files should be written. See [`default_paths`](@ref) for more details
 
 See also [`setup_global!`](@ref)
 """
-function setup_logging!(input::Dict, output_path::String="output_path")
-    config = get(input, "global", Dict())
-    if !(output_path in keys(config))
+function setup_logging!(input::Dict, output_path::String="OUTPUT_PATH")
+    config = get(input, "GLOBAL", Dict())
+    if !(uppercase(output_path) in keys(config))
         throw(ErrorException("Output path $output_path not defined"))
     end
-    output = config[output_path]
-    logging = get(config, "logging", true)
-    config["logging"] = logging
+    output = config[uppercase(output_path)]
+    logging = get(config, "LOGGING", true)
+    config["LOGGING"] = logging
     # Setup logfile
-    log_file = get(config, "log_file", "log.txt")
+    log_file = get(config, "LOG_FILE", "log.txt")
     log_file = abspath(joinpath(output, log_file))
-    config["log_file"] = log_file
-    input["global"] = config
+    config["LOG_FILE"] = log_file
+    input["GLOBAL"] = config
 end
 
 """
@@ -141,9 +141,9 @@ function setup_logger(log_file::AbstractString, verbose::Bool)
 end
 
 """
-    setup_global!(input::Dict, input_path::AbstractString, verbose::Bool, paths::OrderedDict{String, Tuple{String, String}}=OrderedDict{String, Tuple{String, String}}(), log_path::String="output_path"; test::Bool=false)
+    setup_global!(input::Dict, input_path::AbstractString, verbose::Bool, paths::OrderedDict{String, Tuple{String, String}}=OrderedDict{String, Tuple{String, String}}(), log_path::String="OUTPUT_PATH"; test::Bool=false)
 
-Setup the `"global"` information of input, including paths and logging.
+Setup the `"GLOBAL"` information of input, including paths and logging.
 
 # Arguments
 - `input::Dict`: The input file loaded into a `Dict`
@@ -155,18 +155,18 @@ Setup the `"global"` information of input, including paths and logging.
 
 See also [`setup_paths!`](@ref), and [`setup_logging!`](@ref)
 """
-function setup_global!(input::Dict, input_path::AbstractString, verbose::Bool, paths::OrderedDict{String, Tuple{String, String}}=OrderedDict{String, Tuple{String, String}}(), log_path::String="output_path")
-    if !("global" in keys(input))
-        input["global"] = Dict()
+function setup_global!(input::Dict, input_path::AbstractString, verbose::Bool, paths::OrderedDict{String, Tuple{String, String}}=OrderedDict{String, Tuple{String, String}}(), log_path::String="OUTPUT_PATH")
+    if !("GLOBAL" in keys(input))
+        input["GLOBAL"] = Dict()
     end
-    input["global"]["input_path"] = dirname(abspath(input_path))
+    input["GLOBAL"]["INPUT_PATH"] = dirname(abspath(input_path))
     # Merge `paths` with `default_paths`, giving preference to `paths`
     input_paths = merge(default_paths, paths)
     setup_paths!(input, input_paths)
     setup_logging!(input, log_path)
-    config = input["global"]
-    if config["logging"]
-        setup_logger(config["log_file"], verbose)
+    config = input["GLOBAL"]
+    if config["LOGGING"]
+        setup_logger(config["LOG_FILE"], verbose)
     end
     return input
 end

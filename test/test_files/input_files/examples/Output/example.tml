@@ -16,6 +16,9 @@ A = 1
         [[KEY1.SUBDICT.SUBSUBDICT]]
         Z = 6
 
+[DEFAULT]
+EXAMPLE = "Example"
+
 [GLOBAL]
 BASE_PATH = "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/"
 INPUT_PATH = "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples"
@@ -23,13 +26,10 @@ LOG_FILE = "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/exa
 LOGGING = true
 OUTPUT_PATH = "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/Output"
 
-[DEFAULT]
-EXAMPLE = "Example"
-
 [METADATA]
 ORIGINAL = "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/example.tml"
 A = "B"
-DATE = "2023-01-23"
+DATE = "2023-01-26"
 
 [ENV_VAR]
 B = 2
