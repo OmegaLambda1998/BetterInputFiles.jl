@@ -46,9 +46,11 @@ See also [`setup_global!`](@ref)
 """
 function setup_paths!(input::Dict, paths::OrderedDict{String, Tuple{String, String}})
     config = input["GLOBAL"]
+    @show config
     for (path_name, (relative_name, default)) in paths
         # Get which `path_name` to set this path relative to
         # Requires that `relative_name` already exists in `config`
+        @show relative_name
         if !(uppercase(relative_name) in keys(config))
             if !(relative_name in keys(config))
                 throw(ErrorException("Relative path $relative_name for path $path_name doesn't exist. Make sure you have defined your paths in the correct order!"))
@@ -60,6 +62,7 @@ function setup_paths!(input::Dict, paths::OrderedDict{String, Tuple{String, Stri
         end
         relative = config[uppercase(relative_name)] 
         @show relative
+        @show path_name
         if !(uppercase(path_name) in keys(config))
             if !(path_name in keys(config))
                 @show "test2"
