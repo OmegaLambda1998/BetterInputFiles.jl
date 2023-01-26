@@ -45,15 +45,28 @@ Helper function which sets up paths, expanding relative paths and ensuring all i
 See also [`setup_global!`](@ref)
 """
 function setup_paths!(input::Dict, paths::OrderedDict{String, Tuple{String, String}})
-    config = get(input, "GLOBAL", Dict())
+    config = input["GLOBAL"]
     for (path_name, (relative_name, default)) in paths
         # Get which `path_name` to set this path relative to
         # Requires that `relative_name` already exists in `config`
         if !(uppercase(relative_name) in keys(config))
-            throw(ErrorException("Relative path $relative_name for path $path_name doesn't exist. Make sure you have defined your paths in the correct order!"))
+            if !(relative_name in keys(config))
+                throw(ErrorException("Relative path $relative_name for path $path_name doesn't exist. Make sure you have defined your paths in the correct order!"))
+            else
+                config[uppercase(relative_name)] = config[relative_name]
+                delete!(config, relative_name)
+            end
         end
         relative = config[uppercase(relative_name)] 
-        path = get(config, uppercase(path_name), default)
+        if !(uppercase(path_name) in keys(config))
+            if !(path_name in keys(config))
+                config[uppercase(path_name)] = default
+            else
+                config[uppercase(path_name)] = config[path_name]
+                delete!(config, path_name)
+            end
+        end
+        path = config[uppercase(path_name)]
         # If `path` is absolute, ignore `relative`, otherwise make `path` relative to `relative`
         if !isabspath(path)
             path = joinpath(relative, path)
@@ -81,7 +94,7 @@ Assumes that [`setup_paths!`](@ref) has already been run on `input`
 See also [`setup_global!`](@ref)
 """
 function setup_logging!(input::Dict, output_path::String="OUTPUT_PATH")
-    config = get(input, "GLOBAL", Dict())
+    config = input["GLOBAL"]
     if !(uppercase(output_path) in keys(config))
         throw(ErrorException("Output path $output_path not defined"))
     end
@@ -156,17 +169,19 @@ Setup the `"GLOBAL"` information of input, including paths and logging.
 See also [`setup_paths!`](@ref), and [`setup_logging!`](@ref)
 """
 function setup_global!(input::Dict, input_path::AbstractString, verbose::Bool, paths::OrderedDict{String, Tuple{String, String}}=OrderedDict{String, Tuple{String, String}}(), log_path::String="OUTPUT_PATH")
-    @show input
     if !("GLOBAL" in keys(input))
-        input["GLOBAL"] = Dict()
+        if !("global" in keys(input))
+            input["GLOBAL"] = Dict()
+        else
+            input["GLOBAL"] = input["global"]
+            delete!(input, "global")
+        end
     end
     input["GLOBAL"]["INPUT_PATH"] = dirname(abspath(input_path))
     # Merge `paths` with `default_paths`, giving preference to `paths`
     input_paths = merge(default_paths, paths)
     setup_paths!(input, input_paths)
-    @show input
     setup_logging!(input, log_path)
-    @show input
     config = input["GLOBAL"]
     if config["LOGGING"]
         setup_logger(config["LOG_FILE"], verbose)
