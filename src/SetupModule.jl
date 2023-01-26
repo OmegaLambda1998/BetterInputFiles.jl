@@ -62,7 +62,7 @@ function setup_paths!(input::Dict, paths::OrderedDict{String, Tuple{String, Stri
             if !(lowercase(path_name) in keys(config))
                 config[uppercase(path_name)] = default
             else
-                config[uppercase(path_name)] = config[path_name]
+                config[uppercase(path_name)] = config[lowercase(path_name)]
                 delete!(config, path_name)
             end
         end
