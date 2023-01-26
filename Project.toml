@@ -1,7 +1,7 @@
 name = "InputFiles"
 uuid = "c0b1955d-4702-4680-a946-720482e78a48"
 authors = ["Patrick Armstrong <u6096820@anu.edu.au>"]
-version = "1.1.5"
+version = "1.1.6"
 
 [deps]
 DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"

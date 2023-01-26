@@ -169,6 +169,7 @@ Setup the `"GLOBAL"` information of input, including paths and logging.
 See also [`setup_paths!`](@ref), and [`setup_logging!`](@ref)
 """
 function setup_global!(input::Dict, input_path::AbstractString, verbose::Bool, paths::OrderedDict{String, Tuple{String, String}}=OrderedDict{String, Tuple{String, String}}(), log_path::String="OUTPUT_PATH")
+    @show 1, input
     if !("GLOBAL" in keys(input))
         if !("global" in keys(input))
             input["GLOBAL"] = Dict()
@@ -181,11 +182,14 @@ function setup_global!(input::Dict, input_path::AbstractString, verbose::Bool, p
     # Merge `paths` with `default_paths`, giving preference to `paths`
     input_paths = merge(default_paths, paths)
     setup_paths!(input, input_paths)
+    @show 2, input
     setup_logging!(input, log_path)
+    @show 3, input
     config = input["GLOBAL"]
     if config["LOGGING"]
         setup_logger(config["LOG_FILE"], verbose)
     end
+    @show 4, input
     return input
 end
 
