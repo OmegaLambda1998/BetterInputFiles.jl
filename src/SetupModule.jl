@@ -53,20 +53,25 @@ function setup_paths!(input::Dict, paths::OrderedDict{String, Tuple{String, Stri
             if !(relative_name in keys(config))
                 throw(ErrorException("Relative path $relative_name for path $path_name doesn't exist. Make sure you have defined your paths in the correct order!"))
             else
+                @show "test1"
                 config[uppercase(relative_name)] = config[relative_name]
                 delete!(config, relative_name)
             end
         end
         relative = config[uppercase(relative_name)] 
+        @show relative
         if !(uppercase(path_name) in keys(config))
             if !(path_name in keys(config))
+                @show "test2"
                 config[uppercase(path_name)] = default
             else
+                @show "test3"
                 config[uppercase(path_name)] = config[path_name]
                 delete!(config, path_name)
             end
         end
         path = config[uppercase(path_name)]
+        @show path
         # If `path` is absolute, ignore `relative`, otherwise make `path` relative to `relative`
         if !isabspath(path)
             path = joinpath(relative, path)
