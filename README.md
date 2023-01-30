@@ -20,7 +20,7 @@ Pkg.add("InputFiles")
 ```
 
 ## Usage
-This package provides one main function, and a number of helper macros. The `setup_input` function does most of the heavy lifting, pre-processing, loading, and post-processing the input file you give it. An idiomatic way of using this package is as follows:
+This package provides one main function - `setup_input`. This function does most of the heavy lifting, pre-processing, loading, and post-processing the input file you give it. An idiomatic way of using this package is as follows:
 
 ```julia
 using InputFiles
@@ -44,7 +44,7 @@ function main()
     args = get_args()
     verbose = args["verbose"]
     input_path = args["input"]
-    input = setup_input(input_path, verbose)
+    input = setup_input(input_path, verbose) # <- Have InputFiles prepare your input
     # Run your package with the input file
     run_MyPackage(input)
 end
