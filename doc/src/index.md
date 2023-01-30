@@ -50,3 +50,89 @@ function main()
     run_MyPackage(input)
 end
 ```
+
+## Example
+Given the following input file:
+
+```
+[ default ]
+example = "Example"
+
+[ key1 ]
+a = 1
+b = 2
+    [ key1.subdict ]
+    x = 3
+    y = 4
+    [[ key1.subdict.subsubdict ]]
+        z = 5
+    [[ key1.subdict.subsubdict ]]
+        z = 6
+
+<include some/other/input.toml>
+
+[ env_var ]
+a = <$A>
+b = <$B>
+
+[ interpolation ]
+a = 1
+b = <%a>
+c = <%example>
+
+```
+
+Given the environmental variables `A = 1`, and `B = 1`, and `some/other/input.toml`:
+
+```
+[ key2 ]
+a = 1
+b = 2
+```
+
+`setup_input` will:
+1. Load in the initial input file
+2. Transform it into input below
+3. Ensure all relative paths are expanded to absolute paths, and ensure they exist
+5. Setup logging
+6. Save the transformed input file to an output directory
+
+```
+[METADATA]
+ORIGINAL = "/path/to/original/input.toml"
+DATE = "2023-01-23"
+
+[GLOBAL]
+BASE_PATH = "/path/to/original"
+INPUT_PATH = "/path/to/original"
+OUTPUT_PATH = "/path/to/original/Output"
+LOG_FILE = "/path/to/original/Output/log.txt"
+LOGGING = true
+
+[DEFAULT]
+EXAMPLE = "Example"
+
+[KEY1]
+B = 2
+A = 1
+
+    [KEY1.SUBDICT]
+    Y = 4
+    X = 3
+
+        [[KEY1.SUBDICT.SUBSUBDICT]]
+        Z = 5
+        [[KEY1.SUBDICT.SUBSUBDICT]]
+        Z = 6
+
+[ENV_VAR]
+B = 2
+A = 1
+
+[INTERPOLATION]
+B = 1
+A = 1
+C = "Example"
+```
+
+As you can see, all key's have been capitalised so users don't need to worry about capitalisation when writing their inputs. Environmental variables have been interpolated, as have local keys and any key in `[ DEFAULT ]`. Finally, a `[ METADATA ]` key has been added containing the path to the original file, and the date the script was run, and a `[ GLOBAL ]` key was added containing information about paths and logging which can be used throughout your script. This functionality will work for both `.yaml` and `.json` files as well, and can be extended to other input types.
