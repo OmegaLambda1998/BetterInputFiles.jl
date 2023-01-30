@@ -1,7 +1,7 @@
 name = "InputFiles"
 uuid = "c0b1955d-4702-4680-a946-720482e78a48"
 authors = ["Patrick Armstrong <u6096820@anu.edu.au>"]
-version = "1.1.3"
+version = "1.1.4"
 
 [deps]
 DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
@@ -12,9 +12,17 @@ LoggingExtras = "e6f89c97-d47a-5376-807f-9c37f3926c36"
 TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 YAML = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
 
+[compat]
+DataStructures = ">= 0.18"
+JSON = ">= 0.21"
+LoggingExtras = ">= 1.0"
+TOML = ">= 1.0"
+YAML = ">= 0.4"
+
 [extras]
-DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 
 [targets]
-test = ["Test", "DataStructures"]
+test = ["Test", "Dates", "DataStructures"]
