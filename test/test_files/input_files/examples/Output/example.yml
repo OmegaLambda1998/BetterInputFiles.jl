@@ -14,15 +14,15 @@ KEY1:
 DEFAULT:
   EXAMPLE: "Example"
 GLOBAL:
-  BASE_PATH: "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/"
-  INPUT_PATH: "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples"
-  LOG_FILE: "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/Output/log.txt"
+  BASE_PATH: "/home/patricka/.julia/dev/BetterInputFiles/test/test_files/input_files/examples/"
+  INPUT_PATH: "/home/patricka/.julia/dev/BetterInputFiles/test/test_files/input_files/examples"
+  LOG_FILE: "/home/patricka/.julia/dev/BetterInputFiles/test/test_files/input_files/examples/Output/log.txt"
   LOGGING: true
-  OUTPUT_PATH: "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/Output"
+  OUTPUT_PATH: "/home/patricka/.julia/dev/BetterInputFiles/test/test_files/input_files/examples/Output"
 METADATA:
-  ORIGINAL: "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/examples/example.yml"
+  ORIGINAL: "/home/patricka/.julia/dev/BetterInputFiles/test/test_files/input_files/examples/example.yml"
   A: "B"
-  DATE: "2023-01-30"
+  DATE: "2023-01-31"
 ENV_VAR:
   B: 2
   A: 1

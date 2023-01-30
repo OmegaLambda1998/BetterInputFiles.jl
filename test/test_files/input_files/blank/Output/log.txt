@@ -1,1 +1,1 @@
-InputFiles.SetupModule | [Info] Logging to /home/patricka/.julia/dev/InputFiles/test/test_files/input_files/blank/Output/log.txt
+BetterInputFiles.SetupModule | [Info] Logging to /home/patricka/.julia/dev/BetterInputFiles/test/test_files/input_files/blank/Output/log.txt

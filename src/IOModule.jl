@@ -93,7 +93,7 @@ function get_InputExt(ext::String)
     try
         type = getfield(IOModule, Symbol(sym))
     catch e
-        @error "InputFiles doesn't know how to load an input with extension .$ext, options include $exts"
+        @error "BetterInputFiles doesn't know how to load an input with extension .$ext, options include $exts"
         throw(e)
     end
 end
@@ -401,7 +401,7 @@ Specify the extension type of `input_path` manually, then preprocess the ipnut.
 - `input_path::AbstractString`: Input file to preprocess
 - `ext::String`: Manually selected extension. Must be part of [`exts`](@ref)
 
-If the extension of `input_path` is not defined by `InputFiles`, but acts like a defined extension, you can specify which extension to use via this function, which will then run [`preprocess_input(::AbstractString, ::String)`](@ref)
+If the extension of `input_path` is not defined by `BetterInputFiles`, but acts like a defined extension, you can specify which extension to use via this function, which will then run [`preprocess_input(::AbstractString, ::String)`](@ref)
 """
 function preprocess_input(input_path::AbstractString, ext::String, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
 

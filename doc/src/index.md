@@ -1,6 +1,6 @@
-# InputFiles.jl Documentation
+# BetterInputFiles.jl Documentation
 
-[InputFiles.jl](https://github.com/OmegaLambda1998/InputFiles.jl)
+[BetterInputFiles.jl](https://github.com/OmegaLambda1998/BetterInputFiles.jl)
 
 Provides consistent methods to load in input files, such as `.toml`, `.yaml`, and `.json` files. Also extends the functionality of these files, via pre-processing, and post-processing.
 
@@ -17,14 +17,14 @@ I already use this in many of my projects, including [IABCosmo.jl](https://githu
 
 ```julia
 using Pkg
-Pkg.add("InputFiles")
+Pkg.add("BetterInputFiles")
 ```
 
 ## Usage
 This package provides one main function - `setup_input`. This function does most of the heavy lifting, pre-processing, loading, and post-processing the input file you give it. An idiomatic way of using this package is as follows:
 
 ```julia
-using InputFiles
+using BetterInputFiles
 using DataStructures
 using ArgParse
 
@@ -45,7 +45,7 @@ function main()
     args = get_args()
     verbose = args["verbose"]
     input_path = args["input"]
-    input = setup_input(input_path, verbose) # <- Have InputFiles prepare your input
+    input = setup_input(input_path, verbose) # <- Have BetterInputFiles prepare your input
     # Run your package with the input file
     run_MyPackage(input)
 end
@@ -143,7 +143,7 @@ Much of this behaviour can be modified, including:
 - Add new paths to `GLOBAL`, which can be absolute, or relative to any other path in `GLOBAL`
 - Changing `LOG_FILE`, or disabling logging altogether
 
-Finally, if your input file acts like a `.toml`, `.yaml`, or `.json` file, but has a different extension, you can force `InputFiles` to treat your input file as one of the implemented file types via
+Finally, if your input file acts like a `.toml`, `.yaml`, or `.json` file, but has a different extension, you can force `BetterInputFiles` to treat your input file as one of the implemented file types via
 ```julia
 input = setup_input("/path/to/input.example", verbose, "toml")
 ```

@@ -1,4 +1,4 @@
-module InputFiles 
+module BetterInputFiles 
 
 # External Packages
 using DataStructures
@@ -52,7 +52,7 @@ end
 """
     setup_input(input_path::AbstractString, verbose::Bool, ext::InputExt; paths::OrderedDict{String, Tuple{String, String}}=OrderedDict{String, Tuple{String, String}}(), log_path::String="output_path", custom_metadata::Vector{Tuple{String, String}}=Vector{Tuple{String, String}}())
 
-Main `InputFiles` function, given a path to an input file, this will preprocess, load, and postprocess the input file, including setting up paths and logging.
+Main `BetterInputFiles` function, given a path to an input file, this will preprocess, load, and postprocess the input file, including setting up paths and logging.
 
 # Arguments
 - `input_path::AbstractString`: Path to input file

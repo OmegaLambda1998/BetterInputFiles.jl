@@ -1,14 +1,14 @@
 using Documenter
 push!(LOAD_PATH, "../src/")
-using InputFiles
+using BetterInputFiles
 
-DocMeta.setdocmeta!(InputFiles, :DocTestSetup, :(using InputFiles); recursive=true)
+DocMeta.setdocmeta!(BetterInputFiles, :DocTestSetup, :(using BetterInputFiles); recursive=true)
 
 makedocs(
-    sitename="InputFiles Documentation",
-    modules = [InputFiles, InputFiles.SetupModule, InputFiles.IOModule],
+    sitename="BetterInputFiles Documentation",
+    modules = [BetterInputFiles, BetterInputFiles.SetupModule, BetterInputFiles.IOModule],
     pages = [
-        "InputFiles" => "index.md",
+        "BetterInputFiles" => "index.md",
         "Advanced Usage" => "advanced.md",
         "API" => "api.md"
     ],
@@ -18,5 +18,5 @@ makedocs(
 )
 
 deploydocs(
-    repo = "github.com/OmegaLambda1998/InputFiles.jl.git"
+    repo = "github.com/OmegaLambda1998/BetterInputFiles.jl.git"
 )

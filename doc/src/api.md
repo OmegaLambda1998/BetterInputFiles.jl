@@ -6,23 +6,23 @@ Pages = ["api.md"]
 Depth = 5
 ```
 
-## InputFiles Functions
+## BetterInputFiles Functions
 
 ```@meta
-CurrentModule = InputFiles
+CurrentModule = BetterInputFiles
 ```
 
 ### Public objects
 
 ```@autodocs
-Modules = [InputFiles]
+Modules = [BetterInputFiles]
 Private = false
 ```
 
 ## Setup Functions
 
 ```@meta
-CurrentModule = InputFiles.SetupModule
+CurrentModule = BetterInputFiles.SetupModule
 ```
 
 ### Public objects 
@@ -41,7 +41,7 @@ Public = false
 ## IO Functions
 
 ```@meta
-CurrentModule = InputFiles.IOModule
+CurrentModule = BetterInputFiles.IOModule
 ```
 
 ### Public objects 

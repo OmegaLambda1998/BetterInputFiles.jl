@@ -1,4 +1,4 @@
-using InputFiles 
+using BetterInputFiles 
 using Test
 using DataStructures
 using Dates
@@ -11,7 +11,7 @@ const ext_dict::Dict{String, String} = Dict(
 )
 
 
-@testset verbose = true "InputFiles.jl" begin
+@testset verbose = true "BetterInputFiles.jl" begin
 
     ENV["A"] = 1
     ENV["B"] = 2
@@ -33,7 +33,7 @@ const ext_dict::Dict{String, String} = Dict(
                         ext = ext_dict[ext]
                     end
                     input = setup_input(joinpath(input_dir, file), false, ext; custom_metadata=custom_metadata)
-                    expected_output = InputFiles.load_inputfile(joinpath(expected_dir, file), ext)
+                    expected_output = BetterInputFiles.load_inputfile(joinpath(expected_dir, file), ext)
                     # Deal with github's paths
                     input["METADATA"] = expected_output["METADATA"]
                     input["GLOBAL"] = expected_output["GLOBAL"]
