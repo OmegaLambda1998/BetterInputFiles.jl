@@ -92,7 +92,7 @@ b = 2
 
 `setup_input` will:
 1. Load in the initial input file
-2. Transform it into input below
+2. Transform it into the input below
 3. Ensure all relative paths are expanded to absolute paths, and ensure they exist
 5. Setup logging
 6. Save the transformed input file to an output directory
