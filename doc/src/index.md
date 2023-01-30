@@ -15,7 +15,7 @@ I already use this in many of my projects, including [IABCosmo.jl](https://githu
 
 ## Install
 
-```
+```julia
 using Pkg
 Pkg.add("InputFiles")
 ```
@@ -54,7 +54,7 @@ end
 ## Example
 Given the following input file:
 
-```
+```toml
 [ default ]
 example = "Example"
 
@@ -84,7 +84,7 @@ c = <%example>
 
 Given the environmental variables `A = 1`, and `B = 1`, and `some/other/input.toml`:
 
-```
+```toml
 [ key2 ]
 a = 1
 b = 2
@@ -97,7 +97,7 @@ b = 2
 5. Setup logging
 6. Save the transformed input file to an output directory
 
-```
+```toml
 [METADATA]
 ORIGINAL = "/path/to/original/input.toml"
 DATE = "2023-01-23"
@@ -136,3 +136,14 @@ C = "Example"
 ```
 
 As you can see, all key's have been capitalised so users don't need to worry about capitalisation when writing their inputs. Environmental variables have been interpolated, as have local keys and any key in `[ DEFAULT ]`. Finally, a `[ METADATA ]` key has been added containing the path to the original file, and the date the script was run, and a `[ GLOBAL ]` key was added containing information about paths and logging which can be used throughout your script. This functionality will work for both `.yaml` and `.json` files as well, and can be extended to other input types.
+
+Much of this behaviour can be modified, including:
+- Adding additional keys to the `METADATA` key
+- Changing `BASE_PATH` (by default, other paths are relative to `BASE_PATH`, although this can be changed), and `OUTPUT_PATH` (where all output, including logs, will be placed)
+- Add new paths to `GLOBAL`, which can be absolute, or relative to any other path in `GLOBAL`
+- Changing `LOG_FILE`, or disabling logging altogether
+
+Finally, if your input file acts like a `.toml`, `.yaml`, or `.json` file, but has a different extension, you can force `InputFiles` to treat your input file as one of the implemented file types via
+```julia
+input = setup_input("/path/to/input.example", verbose, "toml")
+```
