@@ -1,6 +1,8 @@
 [![Tests](https://github.com/OmegaLambda1998/BetterInputFiles.jl/actions/workflows/test.yml/badge.svg)](https://github.com/OmegaLambda1998/BetterInputFiles.jl/actions/workflows/test.yml)
 [![Documentation](https://github.com/OmegaLambda1998/BetterInputFiles.jl/actions/workflows/documentation.yml/badge.svg)](https://omegalambda.com.au/BetterInputFiles.jl/)
 
+# BetterInputFiles.jl
+
 Provides consistent methods to load in input files, such as `.toml`, `.yaml`, and `.json` files. Also extends the functionality of these files, via pre-processing, and post-processing.
 
 Functionality provided includes:
