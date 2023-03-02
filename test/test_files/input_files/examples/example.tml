@@ -9,10 +9,10 @@ b = 2
     [ key1.subdict ]
     x = 3
     y = 4
-    [[ key1.subdict.subsubdict ]]
-        z = 5
-    [[ key1.subdict.subsubdict ]]
-        z = 6
+    [[ key1.subdict.subsublist ]]
+    z = 5
+    [[ key1.subdict.subsublist ]]
+    z = 6
 
 # Test include
 <include includes/includes.toml>
@@ -22,9 +22,31 @@ b = 2
 a = <$A>
 b = <$B>
 
+    [ env_var.subdict ]
+    a = <$A>
+    b = <$B>
+
+    [[ env_var.sublist ]]
+    a = <$A>
+
+    [[ env_var.sublist ]]
+    b = <$B>
+
 # Test interpolations
 [ interpolation ]
 a = 1
 b = <%a>
 c = <%example>
+
+    [ interpolation.subdict ]
+    a = 1
+    b = <%a>
+    c = <%example>
+
+    [[ interpolation.sublist ]]
+    a = 1
+    b = <%a>
+
+    [[ interpolation.sublist ]]
+    c = <%example>
 

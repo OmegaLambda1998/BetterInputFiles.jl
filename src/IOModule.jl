@@ -592,6 +592,8 @@ function process_interpolation(input::Dict, default::Dict)
     for (key, value) in input
         if typeof(value) <: Dict
             input[key] = process_interpolation(value, default)
+        elseif typeof(value) <: AbstractArray
+            input[key] = [process_interpolation(v, default) for v in value]
         elseif typeof(value) <: AbstractString
             m = match(reg, value)
             if !isnothing(m)
