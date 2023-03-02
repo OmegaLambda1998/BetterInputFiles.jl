@@ -4,16 +4,16 @@ authors = ["Patrick Armstrong <u6096820@anu.edu.au>"]
 version = "1.1.6"
 
 [deps]
-DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 InteractiveUtils = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 LoggingExtras = "e6f89c97-d47a-5376-807f-9c37f3926c36"
+OrderedCollections = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
 TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 YAML = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
 
 [compat]
-DataStructures = "0.18"
+OrderedCollections = "1.4"
 JSON = "0.21"
 LoggingExtras = "1.0"
 TOML = "1.0"
@@ -21,9 +21,9 @@ YAML = "0.4"
 julia = "1"
 
 [extras]
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+OrderedCollections = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
-DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Test", "Dates", "DataStructures"]
+test = ["Test", "Dates", "OrderedCollections"]

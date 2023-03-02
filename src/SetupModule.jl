@@ -1,7 +1,7 @@
 module SetupModule
 
 # External Packages
-using DataStructures
+using OrderedCollections 
 using LoggingExtras
 
 # Internal Packages

@@ -1,7 +1,7 @@
 module BetterInputFiles 
 
 # External Packages
-using DataStructures
+using OrderedCollections 
 
 # Internal Packages
 include("IOModule.jl")

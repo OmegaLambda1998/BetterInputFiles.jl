@@ -26,7 +26,7 @@ This package provides one main function - `setup_input`. This function does most
 
 ```julia
 using BetterInputFiles
-using DataStructures
+using OrderedCollections 
 using ArgParse
 
 function get_args()

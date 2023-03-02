@@ -1,7 +1,7 @@
 [deps]
-DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 LoggingExtras = "e6f89c97-d47a-5376-807f-9c37f3926c36"
+OrderedCollections = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
 TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 YAML = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
