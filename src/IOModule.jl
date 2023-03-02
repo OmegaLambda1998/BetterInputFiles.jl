@@ -518,7 +518,7 @@ function process_includes(raw::String, input_path::AbstractString)
             if isfile(include_file)
                 open(include_file, "r") do io
                     replace_include = read(io, String)
-                    raw = replace(raw, "<include $file>" => read(io, String))
+                    raw = replace(raw, "<include $file>" => replace_include)
                 end
             else
                 @error "Can't find include file: $include_file"
@@ -593,7 +593,12 @@ function process_interpolation(input::Dict, default::Dict)
         if typeof(value) <: Dict
             input[key] = process_interpolation(value, default)
         elseif typeof(value) <: AbstractArray
-            input[key] = [process_interpolation(v, default) for v in value]
+            # Get the set of all types contained in value
+            value_types = collect(Set(typeof.(value)))
+            # If value is a list of key => value pairs, recurse interpolation
+            if (length(value_types) == 1) && (value_types[1] == Dict{String, Any})
+                input[key] = [process_interpolation(v, default) for v in value]
+            end
         elseif typeof(value) <: AbstractString
             m = match(reg, value)
             if !isnothing(m)
