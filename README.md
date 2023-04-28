@@ -1,5 +1,5 @@
 [![Tests](https://github.com/OmegaLambda1998/BetterInputFiles.jl/actions/workflows/test.yml/badge.svg)](https://github.com/OmegaLambda1998/BetterInputFiles.jl/actions/workflows/test.yml)
-[![Documentation](https://github.com/OmegaLambda1998/BetterInputFiles.jl/actions/workflows/documentation.yml/badge.svg)](https://omegalambda.com.au/BetterInputFiles.jl/)
+[![Documentation](https://github.com/OmegaLambda1998/BetterInputFiles.jl/actions/workflows/documentation.yml/badge.svg)](https://omegalambda.au/BetterInputFiles.jl/)
 
 # BetterInputFiles.jl
 
