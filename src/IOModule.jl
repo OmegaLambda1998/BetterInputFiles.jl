@@ -421,7 +421,7 @@ Preprocess the input path before running setup.
 Preprocessing includes adding metadata comments at the top-level, including other files, inserting environmental variables, propegating default values, interpolating values, and ensuring all variables are upper-case.
 """
 function preprocess_input(input_path::AbstractString, ext::InputExt, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
-
+    input_path = abspath(input_path)
     raw = load_raw_inputfile(input_path)
     raw = add_metadata(raw, ext, input_path, custom_metadata)
     raw = process_includes(raw, input_path) 

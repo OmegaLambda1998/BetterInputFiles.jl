@@ -22,7 +22,7 @@ GLOBAL:
 METADATA:
   ORIGINAL: "/home/patricka/.julia/dev/BetterInputFiles/test/test_files/input_files/examples/example.yml"
   A: "B"
-  DATE: "2023-03-02"
+  DATE: "2023-05-09"
 ENV_VAR:
   B: 2
   A: 1
