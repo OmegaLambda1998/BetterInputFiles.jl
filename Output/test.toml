@@ -1,0 +1,14 @@
+[[INTERPOLATION]]
+B = 1
+A = 1
+
+[GLOBAL]
+BASE_PATH = "/home/patricka/.julia/dev/BetterInputFiles/"
+INPUT_PATH = "/home/patricka/.julia/dev/BetterInputFiles"
+LOG_FILE = "/home/patricka/.julia/dev/BetterInputFiles/Output/log.txt"
+LOGGING = true
+OUTPUT_PATH = "/home/patricka/.julia/dev/BetterInputFiles/Output"
+
+[METADATA]
+ORIGINAL = "/home/patricka/.julia/dev/BetterInputFiles/test.toml"
+DATE = "2023-05-09"
