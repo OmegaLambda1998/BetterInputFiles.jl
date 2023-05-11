@@ -1,7 +1,7 @@
 name = "BetterInputFiles"
 uuid = "c0b1955d-4702-4680-a946-720482e78a48"
 authors = ["Patrick Armstrong <u6096820@anu.edu.au>"]
-version = "1.1.7"
+version = "1.1.8"
 
 [deps]
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
