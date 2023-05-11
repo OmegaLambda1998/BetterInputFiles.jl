@@ -67,22 +67,14 @@ end
 
 Convenience list of all [`InputExt`](@ref) subtypes defined.
 """
-if VERSION < v"1.8"
-    const input_exts = [ext() for ext in subtypes(InputExt)]
-else
-    const input_exts::Vector{InputExt} = [ext() for ext in subtypes(InputExt)]
-end
+const input_exts = [ext() for ext in subtypes(InputExt)]
 
 """
     exts::Vector{String}
 
 Convencience list of all '.extension' file extensions for each defined subtype of [`InputExt`](@ref).
 """
-if VERSION < v"1.8"
-    const exts = get_ext.(input_exts)
-else
-    const exts::Vector{String} = get_ext.(input_exts)
-end
+const exts = get_ext.(input_exts)
 
 """
     get_InputExt(ext::String)
