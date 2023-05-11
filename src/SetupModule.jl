@@ -26,7 +26,7 @@ default_paths::OrderedDict{String, Tuple{String, String}} = OrderedDict{String, 
 This dictionary maps `("path_name" => ("relative_name", "default_path"))`, where `"path_name"` is a human readable name for the path, `"relative_name"` is the name of the path which `"path_name"` is relative to, and `"default_path"` is the default value for the path (either absolute or relative). If `"path_name"` already exists inside `input["GLOBAL"]`, then that path will be used either as is (if an absolute path) or relative to `"relative_name"`, otherwise the `"default_path"` will be used
 
 """
-const default_paths::OrderedDict{String, Tuple{String, String}} = OrderedDict{String, Tuple{String, String}}(
+const default_paths = OrderedDict{String, Tuple{String, String}}(
     # Name => relative, default
     "BASE_PATH" => ("INPUT_PATH", ""),
     "OUTPUT_PATH" => ("BASE_PATH", "Output")
