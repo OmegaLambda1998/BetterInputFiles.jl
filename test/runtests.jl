@@ -4,7 +4,7 @@ using OrderedCollections
 using Dates
 
 
-const ext_dict::Dict{String, String} = Dict(
+const ext_dict = Dict(
     "yml" => "yaml",
     "tml" => "toml",
     "jsn" => "json"
