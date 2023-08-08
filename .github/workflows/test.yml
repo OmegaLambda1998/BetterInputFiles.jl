@@ -1,13 +1,17 @@
-name: Tests 
+name: Run Tests 
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail_fast: false
       matrix:
-        julia-version: ['nightly', '1.7', '1.8', '1.9']
+      # '1.6' is the lowest supported version
+        # '1' is the latest stable version
+        # 'nightly' is the latest nightly release
+        julia-version: ['1.6', '1', 'nightly']
         julia-arch: [x64, x86]
         os: [ubuntu-latest, macOS-latest]
         exclude:
