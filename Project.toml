@@ -13,16 +13,16 @@ TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 YAML = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
 
 [compat]
-OrderedCollections = "1.4"
 JSON = "0.21"
 LoggingExtras = "1.0"
+OrderedCollections = "1.4"
 TOML = "1.0"
 YAML = "0.4"
 julia = "1"
 
 [extras]
-OrderedCollections = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+OrderedCollections = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]

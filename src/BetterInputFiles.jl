@@ -63,7 +63,6 @@ Main `BetterInputFiles` function, given a path to an input file, this will prepr
 - `custom_metadata::Vector{Tuple{String, String}}=Vector{Tuple{String, String}}()`: Additonal metadata to include in the input file, in addition to creation date and `input_path`
 """
 function setup_input(input_path::AbstractString, verbose::Bool, ext::InputExt; paths::OrderedDict{String, Tuple{String, String}}=OrderedDict{String, Tuple{String, String}}(), log_path::String="output_path", custom_metadata::Vector{Tuple{String, String}}=Vector{Tuple{String, String}}())
-
     input::Dict{String, Any}, ext = preprocess_input(input_path, ext, custom_metadata)
     setup_global!(input, input_path, verbose, paths, log_path)
     input = postprocess_input(input)
