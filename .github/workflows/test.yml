@@ -6,7 +6,7 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail_fast: false
+      fail-fast: false
       matrix:
       # '1.6' is the lowest supported version
         # '1' is the latest stable version
