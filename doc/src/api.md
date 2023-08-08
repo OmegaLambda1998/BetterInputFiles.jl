@@ -12,7 +12,7 @@ Depth = 5
 CurrentModule = BetterInputFiles
 ```
 
-### Public objects
+### Public Objects
 
 ```@autodocs
 Modules = [BetterInputFiles]
@@ -25,14 +25,14 @@ Private = false
 CurrentModule = BetterInputFiles.SetupModule
 ```
 
-### Public objects 
+### Public Objects 
 
 ```@autodocs
 Modules = [SetupModule]
 Private = false
 ```
 
-### Private objects
+### Private Objects
 
 ```@autodocs
 Modules = [SetupModule]
@@ -44,13 +44,13 @@ Public = false
 CurrentModule = BetterInputFiles.IOModule
 ```
 
-### Public objects 
+### Public Objects 
 
 ```@autodocs
 Modules = [IOModule]
 Private = false
 ```
-### Private objects
+### Private Objects
 
 ```@autodocs
 Modules = [IOModule]
