@@ -1,7 +1,7 @@
 module SetupModule
 
 # External Packages
-using OrderedCollections 
+using OrderedCollections
 using LoggingExtras
 
 # Internal Packages
@@ -26,7 +26,7 @@ default_paths::OrderedDict{String, Tuple{String, String}} = OrderedDict{String, 
 This dictionary maps `("path_name" => ("relative_name", "default_path"))`, where `"path_name"` is a human readable name for the path, `"relative_name"` is the name of the path which `"path_name"` is relative to, and `"default_path"` is the default value for the path (either absolute or relative). If `"path_name"` already exists inside `input["GLOBAL"]`, then that path will be used either as is (if an absolute path) or relative to `"relative_name"`, otherwise the `"default_path"` will be used
 
 """
-const default_paths = OrderedDict{String, Tuple{String, String}}(
+const default_paths = OrderedDict{String,Tuple{String,String}}(
     # Name => relative, default
     "BASE_PATH" => ("INPUT_PATH", ""),
     "OUTPUT_PATH" => ("BASE_PATH", "Output")
@@ -44,7 +44,7 @@ Helper function which sets up paths, expanding relative paths and ensuring all i
 
 See also [`setup_global!`](@ref)
 """
-function setup_paths!(input::Dict, paths::OrderedDict{String, Tuple{String, String}})
+function setup_paths!(input::Dict, paths::OrderedDict{String,Tuple{String,String}})
     config = input["GLOBAL"]
     for (path_name, (relative_name, default)) in paths
         # Get which `path_name` to set this path relative to
@@ -57,7 +57,7 @@ function setup_paths!(input::Dict, paths::OrderedDict{String, Tuple{String, Stri
                 delete!(config, relative_name)
             end
         end
-        relative = config[uppercase(relative_name)] 
+        relative = config[uppercase(relative_name)]
         if !(uppercase(path_name) in keys(config))
             if !(lowercase(path_name) in keys(config))
                 config[uppercase(path_name)] = default
@@ -127,21 +127,21 @@ function setup_logger(log_file::AbstractString, verbose::Bool)
         level = Logging.Info
     end
     # Define logging format
-    function fmt(io, args)
-        if args.level == Logging.Error
+    function fmt(io::IOContext, args::NamedTuple)
+        if (args.level == Logging.Error)::Bool
             color = :red
             bold = true
-        elseif args.level == Logging.Warn
+        elseif (args.level == Logging.Warn)::Bool
             color = :yellow
             bold = true
-        elseif args.level == Logging.Info
+        elseif (args.level == Logging.Info)::Bool
             color = :cyan
             bold = false
         else
             color = :white
             bold = false
         end
-        printstyled(io, args._module, " | ", "[", args.level, "] ", args.message, "\n"; color = color, bold = bold)
+        printstyled(io, args._module, " | ", "[", args.level, "] ", args.message, "\n"; color=color, bold=bold)
     end
     # Log to both `log_file` and `stdout`
     logger = TeeLogger(
@@ -168,7 +168,7 @@ Setup the `"GLOBAL"` information of input, including paths and logging.
 
 See also [`setup_paths!`](@ref), and [`setup_logging!`](@ref)
 """
-function setup_global!(input::Dict, input_path::AbstractString, verbose::Bool, paths::OrderedDict{String, Tuple{String, String}}=OrderedDict{String, Tuple{String, String}}(), log_path::String="OUTPUT_PATH")
+function setup_global!(input::Dict, input_path::AbstractString, verbose::Bool, paths::OrderedDict{String,Tuple{String,String}}=OrderedDict{String,Tuple{String,String}}(), log_path::String="OUTPUT_PATH")
     if !("GLOBAL" in keys(input))
         if !("global" in keys(input))
             input["GLOBAL"] = Dict()

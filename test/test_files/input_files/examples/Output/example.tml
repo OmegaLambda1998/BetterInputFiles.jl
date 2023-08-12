@@ -40,7 +40,7 @@ OUTPUT_PATH = "/home/patricka/.julia/dev/BetterInputFiles/test/test_files/input_
 [METADATA]
 ORIGINAL = "/home/patricka/.julia/dev/BetterInputFiles/test/test_files/input_files/examples/example.tml"
 A = "B"
-DATE = "2023-05-09"
+DATE = "2023-08-12"
 
 [ENV_VAR]
 B = 2

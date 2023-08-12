@@ -514,14 +514,16 @@ function process_includes(raw::String, input_path::AbstractString)
     ms = eachmatch(reg, raw)
     for m in ms
         for file in m.captures
-            include_file = joinpath(base_dir, file)
-            if isfile(include_file)
-                open(include_file, "r") do io
-                    replace_include = read(io, String)
-                    raw = replace(raw, "<include $file>" => replace_include)
+            if !isnothing(file)
+                include_file = joinpath(base_dir, file)
+                if isfile(include_file)
+                    open(include_file, "r") do io
+                        replace_include = read(io, String)
+                        raw = replace(raw, "<include $file>" => replace_include)
+                    end
+                else
+                    @error "Can't find include file: $include_file"
                 end
-            else
-                @error "Can't find include file: $include_file"
             end
         end
     end
@@ -541,11 +543,13 @@ function process_env_vars(raw::String)
     ms = eachmatch(reg, raw)
     for m in ms
         for key in m.captures
-            value = get(ENV, key, "nothing")
-            if isnothing(value)
-                @error "Unknown environmental variable \$$key, replacing with `$(nothing)`"
+            if !isnothing(key)
+                value = get(ENV, key, "nothing")
+                if isnothing(value)
+                    @error "Unknown environmental variable \$$key, replacing with `$(nothing)`"
+                end
+                raw = replace(raw, "<\$$key>" => value)
             end
-            raw = replace(raw, "<\$$key>" => value)
         end
     end
     return raw
