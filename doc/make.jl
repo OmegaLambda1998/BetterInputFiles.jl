@@ -1,7 +1,7 @@
 using Documenter
 using Pkg
 push!(LOAD_PATH, "../src/")
-Pkg.develop(path=abspath(joinpath(@__DIR__, "../../BetterInputFiles/")))
+Pkg.develop(path=abspath(joinpath(@__DIR__, "../")))
 using BetterInputFiles
 
 DocMeta.setdocmeta!(BetterInputFiles, :DocTestSetup, :(using BetterInputFiles); recursive=true)
