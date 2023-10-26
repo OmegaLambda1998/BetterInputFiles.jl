@@ -8,7 +8,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-      # '1.6' is the lowest supported version
+        # '1.6' is the lowest supported version
         # '1' is the latest stable version
         # 'nightly' is the latest nightly release
         julia-version: ['1.6', '1', 'nightly']
