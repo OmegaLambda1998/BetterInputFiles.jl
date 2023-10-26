@@ -1,6 +1,6 @@
-# BetterInputFiles.jl Documentation
+# [BetterInputFiles.jl](https://github.com/OmegaLambda1998/BetterInputFiles.jl) Documentation
 
-[BetterInputFiles.jl](https://github.com/OmegaLambda1998/BetterInputFiles.jl)
+
 
 Provides consistent methods to load in input files, such as `.toml`, `.yaml`, and `.json` files. Also extends the functionality of these files, via pre-processing, and post-processing.
 
