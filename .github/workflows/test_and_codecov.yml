@@ -1,4 +1,4 @@
-name: CI
+name: Test and Code Coverage
 on:
   push:
     branches:
@@ -24,10 +24,11 @@ jobs:
           - 'nightly'
         os:
           - ubuntu-latest
-          - maxOS-latest
+          - macOS-latest
+          - windows-latest
         arch:
           - x64
-          - x64
+          - x86
         exlude:
           - os: macOS-latest
             julia-arch: x86
