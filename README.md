@@ -1,5 +1,6 @@
-[![Tests](https://github.com/OmegaLambda1998/BetterInputFiles.jl/actions/workflows/test.yml/badge.svg)](https://github.com/OmegaLambda1998/BetterInputFiles.jl/actions/workflows/test.yml)
+[![Tests](https://github.com/OmegaLambda1998/BetterInputFiles.jl/actions/workflows/test_and_codecov.yml/badge.svg)](https://github.com/OmegaLambda1998/BetterInputFiles.jl/actions/workflows/test_and_codecov.yml)
 [![Documentation](https://github.com/OmegaLambda1998/BetterInputFiles.jl/actions/workflows/documentation.yml/badge.svg)](https://omegalambda.au/BetterInputFiles.jl/)
+[![Coverage Status](https://coveralls.io/repos/github/OmegaLambda1998/BetterInputFiles.jl/badge.svg?branch=main)](https://coveralls.io/github/OmegaLambda1998/BetterInputFiles.jl?branch=main)
 
 # BetterInputFiles.jl
 
