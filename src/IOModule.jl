@@ -202,12 +202,7 @@ Read .yaml file in to Dict
 - `ext::YAMLExt`: Extension specifier
 """
 function load_inputfile(input_path::AbstractString, ::YAMLExt)
-    try
-        return fix_dict_type(YAML.load_file(abspath(input_path)))
-    # YAML currently has a bug where empty YAML files (or those with only comments) crash
-    catch AssertionError
-        return Dict{String, Any}()
-    end
+    return fix_dict_type(YAML.load_file(abspath(input_path)))
 end
 
 
@@ -253,12 +248,7 @@ Read .yaml file in to Dict
 function load_input(raw_input::String, ::YAMLExt)
     # Hack to fix windows path bugs
     raw_input = replace(raw_input, "\\" => "/")
-    try
-        return fix_dict_type(YAML.load(raw_input))
-    # YAML currently has a bug where empty YAML files (or those with only comments) crash
-    catch AssertionError
-        return Dict{String, Any}()
-    end
+    return fix_dict_type(YAML.load(raw_input))
 end
 
 """
