@@ -16,6 +16,10 @@ const ext_dict = Dict(
     input_files = joinpath(test_files, "input_files")
     expected_outputs = joinpath(test_files, "expected_outputs")
 
+    @testset "InputExt" begin
+        @test BetterInputFiles.get_InputExt(".yaml") == BetterInputFiles.get_InputExt("yaml")
+    end
+
     @testset "expected errors" begin
         test_file = joinpath(test_files, "broken.ext")
         @test_throws UndefVarError setup_input(test_file, false)

@@ -177,7 +177,7 @@ function setup_global!(input::Dict, input_path::AbstractString, verbose::Bool, p
             delete!(input, "global")
         end
     end
-    input["GLOBAL"]["INPUT_PATH"] = dirname(abspath(input_path))
+    input["GLOBAL"]["INPUT_PATH"] = escape_string(dirname(abspath(input_path)))
     # Merge `paths` with `default_paths`, giving preference to `paths`
     input_paths = merge(default_paths, paths)
     setup_paths!(input, input_paths)

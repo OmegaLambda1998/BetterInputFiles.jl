@@ -89,12 +89,12 @@ Converts from '.extension' to [`InputExt`](@ref) subtype.
 """
 function get_InputExt(ext::String)
     # Remove leading '.'
-    if ext[1] == "."
+    if ext[1] == '.'
         ext = ext[2:end]
     end
     sym = "$(uppercase(ext))Ext"
     try
-        type = getfield(IOModule, Symbol(sym))
+        return getfield(IOModule, Symbol(sym))
     catch e
         @error "BetterInputFiles doesn't know how to load an input with extension .$ext, options include $exts"
         throw(e)
@@ -133,7 +133,7 @@ Loads in the raw text in `input_path`
 """
 function load_raw_inputfile(input_path::AbstractString)
     raw = open(input_path, "r") do io
-        raw = read(io, String)
+        return read(io, String)
     end
     return raw
 end
@@ -444,7 +444,7 @@ Add metadata comment to top-level of .toml file
 
 Adds a new "METADATA" key, containing the date of creation and `input_path` 
 """
-function add_metadata(raw::String, ext::TOMLExt, input_path::AbstractString, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
+function add_metadata(raw::String, ::TOMLExt, input_path::AbstractString, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
     date = today()
     metadata = "[ METADATA ]\n    DATE = \"$date\"\n    ORIGINAL = \"$input_path\"\n"
     for (key, value) in custom_metadata
@@ -465,7 +465,7 @@ Add metadata comment to top-level of .yaml file
 
 Adds a new "METADATA" key, containing the date of creation and `input_path` 
 """
-function add_metadata(raw::String, ext::YAMLExt, input_path::AbstractString, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
+function add_metadata(raw::String, ::YAMLExt, input_path::AbstractString, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
     date = today()
     metadata = "METADATA:\n    DATE: \"$date\"\n    ORIGINAL: \"$input_path\"\n"
     for (key, value) in custom_metadata
@@ -486,7 +486,7 @@ Add metadata comment to top-level of .json file
 
 Adds a new "METADATA" key, containing the date of creation and `input_path` 
 """
-function add_metadata(raw::String, ext::JSONExt, input_path::AbstractString, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
+function add_metadata(raw::String, ::JSONExt, input_path::AbstractString, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
 
     date = today()
     m_str = "\n        \"DATE\": \"$date\",\n        \"ORIGINAL\": \"$input_path\"\n"
