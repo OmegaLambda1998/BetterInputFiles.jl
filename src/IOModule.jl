@@ -221,6 +221,8 @@ Read raw .toml file in to Dict
 - `ext::TOMLExt`: Extension specifier
 """
 function load_input(raw_input::String, ::TOMLExt)
+    # Hack to fix windows path bugs
+    raw_input = replace(raw_input, "\\" => "/")
     return fix_dict_type(TOML.parse(raw_input))
 end
 
@@ -234,6 +236,7 @@ Read .json file in to Dict
 - `ext::JSONExt`: Extension specifier
 """
 function load_input(raw_input::String, ::JSONExt)
+    # Hack to fix windows path bugs
     raw_input = replace(raw_input, "\\" => "/")
     return fix_dict_type(JSON.parse(raw_input))
 end
@@ -248,6 +251,8 @@ Read .yaml file in to Dict
 - `ext::YAMLExt`: Extension specifier
 """
 function load_input(raw_input::String, ::YAMLExt)
+    # Hack to fix windows path bugs
+    raw_input = replace(raw_input, "\\" => "/")
     try
         return fix_dict_type(YAML.load(raw_input))
     # YAML currently has a bug where empty YAML files (or those with only comments) crash
