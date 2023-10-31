@@ -32,6 +32,7 @@ abstract type InputExt end
 [`InputExt`](@ref) subtype for .toml files.
 """
 struct TOMLExt <: InputExt end
+TMLExt() = TOMLExt()
 
 """
     JSONExt <: InputExt
@@ -39,6 +40,7 @@ struct TOMLExt <: InputExt end
 [`InputExt`](@ref) subtype for .json files.
 """
 struct JSONExt <: InputExt end
+JSNExt() = JSONExt()
 
 """
     YAMLExt <: InputExt
@@ -46,6 +48,7 @@ struct JSONExt <: InputExt end
 [`InputExt`] for .yaml files.
 """
 struct YAMLExt <: InputExt end
+YMLExt() = YAMLExt()
 
 """
     get_ext(ext::InputExt)
@@ -87,7 +90,7 @@ Converts from '.extension' to [`InputExt`](@ref) subtype.
 function get_InputExt(ext::String)
     # Remove leading '.'
     if ext[1] == "."
-        etx = ext[2:end]
+        ext = ext[2:end]
     end
     sym = "$(uppercase(ext))Ext"
     try
@@ -145,7 +148,6 @@ Automatically detect extension and attempt to load input into a dictionary
 """
 function load_inputfile(input_path::AbstractString)
     ext = splitext(input_path)[end][2:end] 
-    input_ext = get_InputExt(ext)()
     return fix_dict_type(load_inputfile(input_path, ext))
 end
 
@@ -173,7 +175,7 @@ Read .toml file in to Dict
 - `input_path::AbstractString`: Input path to load
 - `ext::TOMLExt`: Extension specifier
 """
-function load_inputfile(input_path::AbstractString, ext::TOMLExt)
+function load_inputfile(input_path::AbstractString, ::TOMLExt)
     return fix_dict_type(TOML.parsefile(abspath(input_path)))
 end
 
@@ -186,7 +188,7 @@ Read .json file in to Dict
 - `input_path::AbstractString`: Input path to load
 - `ext::JSONExt`: Extension specifier
 """
-function load_inputfile(input_path::AbstractString, ext::JSONExt)
+function load_inputfile(input_path::AbstractString, ::JSONExt)
     return fix_dict_type(JSON.parsefile(abspath(input_path)))
 end
 
@@ -199,7 +201,7 @@ Read .yaml file in to Dict
 - `input_path::AbstractString`: Input path to load
 - `ext::YAMLExt`: Extension specifier
 """
-function load_inputfile(input_path::AbstractString, ext::YAMLExt)
+function load_inputfile(input_path::AbstractString, ::YAMLExt)
     try
         return fix_dict_type(YAML.load_file(abspath(input_path)))
     # YAML currently has a bug where empty YAML files (or those with only comments) crash
@@ -218,7 +220,7 @@ Read raw .toml file in to Dict
 - `raw_input::AbstractString`: Raw input to load
 - `ext::TOMLExt`: Extension specifier
 """
-function load_input(raw_input::String, ext::TOMLExt)
+function load_input(raw_input::String, ::TOMLExt)
     return fix_dict_type(TOML.parse(raw_input))
 end
 
@@ -231,7 +233,7 @@ Read .json file in to Dict
 - `raw_input::String`: Raw input to load
 - `ext::JSONExt`: Extension specifier
 """
-function load_input(raw_input::String, ext::JSONExt)
+function load_input(raw_input::String, ::JSONExt)
     return fix_dict_type(JSON.parse(raw_input))
 end
 
@@ -244,7 +246,7 @@ Read .yaml file in to Dict
 - `raw_input::String`: Raw input to load
 - `ext::YAMLExt`: Extension specifier
 """
-function load_input(raw_input::String, ext::YAMLExt)
+function load_input(raw_input::String, ::YAMLExt)
     try
         return fix_dict_type(YAML.load(raw_input))
     # YAML currently has a bug where empty YAML files (or those with only comments) crash
