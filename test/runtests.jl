@@ -1,4 +1,4 @@
-using BetterInputFiles 
+using BetterInputFiles
 using Test
 using OrderedCollections 
 using Dates
