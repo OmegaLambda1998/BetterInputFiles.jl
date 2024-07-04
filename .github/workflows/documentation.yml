@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - docs
     tags: ['*']
-  pull_request:
   workflow_dispatch:
 
 concurrency:
@@ -24,8 +25,14 @@ jobs:
           version: '1'
       - uses: julia-actions/cache@v2
       - name: Install dependencies
-        run: julia --project=doc/ -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()'
+        run: julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()'
       - name: Build and deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: julia --project=doc/ doc/make.jl
+          # Pkg.add("DocumenterTools")
+          # using DocumenterTools
+          # DocumenterTools.genkeys(user="<github username>", repo="<github repo>")
+          # Pkg.rm("DocumenterTools")
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
+        run: julia --project=docs/ docs/make.jl
