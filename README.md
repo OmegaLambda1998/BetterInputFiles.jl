@@ -104,7 +104,8 @@ Transformed input:
 ```toml
 [METADATA]
 ORIGINAL = "/path/to/original/input.toml"
-DATE = "2023-01-23"
+DATE = "YYYY-MM-DD"
+TIME = "HH:MM:SS"
 
 [GLOBAL]
 BASE_PATH = "/path/to/original"
