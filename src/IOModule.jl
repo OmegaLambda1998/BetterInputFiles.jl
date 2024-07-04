@@ -442,7 +442,8 @@ Adds a new "METADATA" key, containing the date of creation and `input_path`
 """
 function add_metadata(raw::String, ::TOMLExt, input_path::AbstractString, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
     date = today()
-    metadata = "[ METADATA ]\n    DATE = \"$date\"\n    ORIGINAL = \"$input_path\"\n"
+    time = Dates.format(now(), "HH:MM:SS")
+    metadata = "[ METADATA ]\n    DATE = \"$date\"\n    TIME = \"$time\"\n    ORIGINAL = \"$input_path\"\n"
     for (key, value) in custom_metadata
         metadata *= "    $(uppercase(key)) = \"$value\""
     end
