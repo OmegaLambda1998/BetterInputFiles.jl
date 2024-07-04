@@ -29,7 +29,7 @@ This dictionary maps `("path_name" => ("relative_name", "default_path"))`, where
 const default_paths = OrderedDict{String,Tuple{String,String}}(
     # Name => relative, default
     "BASE_PATH" => ("INPUT_PATH", ""),
-    "OUTPUT_PATH" => ("BASE_PATH", "Output")
+    "OUTPUT_PATH" => ("BASE_PATH", "Output"),
 )
 
 
@@ -51,7 +51,11 @@ function setup_paths!(input::Dict, paths::OrderedDict{String,Tuple{String,String
         # Requires that `relative_name` already exists in `config`
         if !(uppercase(relative_name) in keys(config))
             if !(lowercase(relative_name) in keys(config))
-                throw(ErrorException("Relative path $relative_name for path $path_name doesn't exist. Make sure you have defined your paths in the correct order!"))
+                throw(
+                    ErrorException(
+                        "Relative path $relative_name for path $path_name doesn't exist. Make sure you have defined your paths in the correct order!",
+                    ),
+                )
             else
                 config[uppercase(relative_name)] = config[relative_name]
                 delete!(config, relative_name)
@@ -93,7 +97,7 @@ Assumes that [`setup_paths!`](@ref) has already been run on `input`
 
 See also [`setup_global!`](@ref)
 """
-function setup_logging!(input::Dict, output_path::String="OUTPUT_PATH")
+function setup_logging!(input::Dict, output_path::String = "OUTPUT_PATH")
     config = input["GLOBAL"]
     if !(uppercase(output_path) in keys(config))
         throw(ErrorException("Output path $output_path not defined"))
@@ -141,12 +145,23 @@ function setup_logger(log_file::AbstractString, verbose::Bool)
             color = :white
             bold = false
         end
-        printstyled(io, args._module, " | ", "[", args.level, "] ", args.message, "\n"; color=color, bold=bold)
+        printstyled(
+            io,
+            args._module,
+            " | ",
+            "[",
+            args.level,
+            "] ",
+            args.message,
+            "\n";
+            color = color,
+            bold = bold,
+        )
     end
     # Log to both `log_file` and `stdout`
     logger = TeeLogger(
         MinLevelLogger(FormatLogger(fmt, open(log_file, "w")), level),
-        MinLevelLogger(FormatLogger(fmt, stdout), level)
+        MinLevelLogger(FormatLogger(fmt, stdout), level),
     )
     # Set global logger
     global_logger(logger)
@@ -168,7 +183,16 @@ Setup the `"GLOBAL"` information of input, including paths and logging.
 
 See also [`setup_paths!`](@ref), and [`setup_logging!`](@ref)
 """
-function setup_global!(input::Dict, input_path::AbstractString, verbose::Bool, paths::OrderedDict{String,Tuple{String,String}}=OrderedDict{String,Tuple{String,String}}(), log_path::String="OUTPUT_PATH")
+function setup_global!(
+    input::Dict,
+    input_path::AbstractString,
+    verbose::Bool,
+    paths::OrderedDict{String,Tuple{String,String}} = OrderedDict{
+        String,
+        Tuple{String,String},
+    }(),
+    log_path::String = "OUTPUT_PATH",
+)
     if !("GLOBAL" in keys(input))
         if !("global" in keys(input))
             input["GLOBAL"] = Dict()
