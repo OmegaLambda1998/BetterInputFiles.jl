@@ -1,11 +1,8 @@
 name: CompatHelper
 
 on:
-  push:
-    branches:
-      - main
-    tags: ['*']
-  pull_request:
+  schedule:
+    - cron: 0 0 * * *
   workflow_dispatch:
 
 concurrency:
