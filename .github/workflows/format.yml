@@ -1,1 +1,23 @@
-/home/patricka/User/Development/Julia/workflows/format.yml
+name: Format suggestions
+
+on:
+  push:
+    branches:
+      - main
+    tags: ['*']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  # Skip intermediate builds: always.
+  # Cancel intermediate builds: always.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  code-style:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: julia-actions/julia-format@v3
+        with:
+          version: '1'

@@ -1,1 +1,27 @@
-/home/patricka/User/Development/Julia/workflows/treeshake.yml
+name: Check for unused dependencies
+
+on:
+  push:
+    branches:
+      - main
+    tags: ['*']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  # Skip intermediate builds: always.
+  # Cancel intermediate builds: always.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  treeshake:
+    runs-on:
+    steps:
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@latest
+        with:
+          version: '1'
+      - uses: julia-actions/cache@v2
+      - uses: julia-actions/julia-buildpkg@v1
+      - uses: julia-actions/julia-treeshake@main
