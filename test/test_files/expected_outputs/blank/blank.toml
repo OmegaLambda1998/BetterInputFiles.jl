@@ -1,10 +1,12 @@
 [GLOBAL]
-BASE_PATH = "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/blank/"
-INPUT_PATH = "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/blank"
-LOG_FILE = "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/blank/Output/log.txt"
+BASE_PATH = "/home/patricka/User/Development/Julia/BetterInputFiles/test/test_files/input_files/blank/"
+INPUT_PATH = "/home/patricka/User/Development/Julia/BetterInputFiles/test/test_files/input_files/blank"
+LOG_FILE = "/home/patricka/User/Development/Julia/BetterInputFiles/test/test_files/input_files/blank/Output/log.txt"
 LOGGING = true
-OUTPUT_PATH = "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/blank/Output"
+OUTPUT_PATH = "/home/patricka/User/Development/Julia/BetterInputFiles/test/test_files/input_files/blank/Output"
 
 [METADATA]
-ORIGINAL = "/home/patricka/.julia/dev/InputFiles/test/test_files/input_files/blank/blank.toml"
-DATE = "2023-01-19"
+TIME = "16:45:43"
+ORIGINAL = "/home/patricka/User/Development/Julia/BetterInputFiles/test/test_files/input_files/blank/blank.toml"
+A = "B"
+DATE = "2024-07-04"
