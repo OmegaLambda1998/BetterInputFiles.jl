@@ -15,7 +15,7 @@ export load_inputfile
 export load_raw_inputfile
 export save_input
 export postprocess_input
-export preprocess_input 
+export preprocess_input
 export get_InputExt
 export InputExt
 
@@ -110,7 +110,7 @@ Ensure dictionary is of type Dict{String, Any}
 - `input::Dict`: Input to fix
 """
 function fix_dict_type(input::Dict)
-    rtn = Dict{String, Any}()
+    rtn = Dict{String,Any}()
     for (key, value) in input
         if typeof(value) <: Dict
             rtn[key] = fix_dict_type(value)
@@ -147,7 +147,7 @@ Automatically detect extension and attempt to load input into a dictionary
 - `input_path::AbstractString`: Input path to load
 """
 function load_inputfile(input_path::AbstractString)
-    ext = splitext(input_path)[end][2:end] 
+    ext = splitext(input_path)[end][2:end]
     return fix_dict_type(load_inputfile(input_path, ext))
 end
 
@@ -262,7 +262,12 @@ Save `input` to the same directory that logging is being saved.
 - `input_path::AbstractString`: Original path of input
 - `ext::InputExt`: Extension specifier
 """
-function save_input(input::Dict{String, Any}, log_path::String, input_path::AbstractString, ext::InputExt)
+function save_input(
+    input::Dict{String,Any},
+    log_path::String,
+    input_path::AbstractString,
+    ext::InputExt,
+)
     config = input["GLOBAL"]
     output_path = get(config, uppercase(log_path), nothing)
     if isnothing(output_path)
@@ -283,7 +288,7 @@ Save `input` to `output_file`, as a `.toml` file
 - `output_file::AbstractString`: Path to save
 - `ext::TOMLExt`: Extension specifier
 """
-function save_input(input::Dict{String, Any}, output_file::AbstractString, ext::TOMLExt)
+function save_input(input::Dict{String,Any}, output_file::AbstractString, ext::TOMLExt)
     open(output_file, "w") do io
         TOML.print(io, input)
     end
@@ -299,7 +304,7 @@ Save `input` to `output_file`, as a `.json` file
 - `output_file::AbstractString`: Path to save
 - `ext::JSONExt`: Extension specifier
 """
-function save_input(input::Dict{String, Any}, output_file::AbstractString, ext::JSONExt)
+function save_input(input::Dict{String,Any}, output_file::AbstractString, ext::JSONExt)
     open(output_file, "w") do io
         JSON.print(io, input, 4)
     end
@@ -315,7 +320,7 @@ Save `input` to `output_file`, as a `.yaml` file
 - `output_file::AbstractString`: Path to save
 - `ext::YAMLExt`: Extension specifier
 """
-function save_input(input::Dict{String, Any}, output_file::AbstractString, ext::YAMLExt)
+function save_input(input::Dict{String,Any}, output_file::AbstractString, ext::YAMLExt)
     YAML.write_file(output_file, input)
 end
 
@@ -341,7 +346,7 @@ Recursively ensure every key in `input` is uppercase
 - `input::Dict`: The input to update
 """
 function update_case(input::Dict)
-    rtn = Dict{String, Any}()
+    rtn = Dict{String,Any}()
     for (key, value) in input
         rtn[uppercase(key)] = update_case(value)
     end
@@ -357,7 +362,7 @@ Updated the case of every element in `input`.
 - `input::AbstractArray`: Input to process 
 """
 function update_case(input::AbstractArray)
-    return update_case.(input) 
+    return update_case.(input)
 end
 
 """
@@ -382,10 +387,13 @@ Automatically detect extension type of `input_path`, then preprocess the input.
 
 Will error if the extension of `input_path` is not part of [`exts`](@ref). If you wish to manually specify the extension, use `[preprocess_input(::AbstractString, ::String)]`(@ref). After the extension is found, will run [`preprocess_input(::AbstractString, ::String)]`(@ref) 
 """
-function preprocess_input(input_path::AbstractString, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
+function preprocess_input(
+    input_path::AbstractString,
+    custom_metadata::Vector{Tuple{String,String}} = Vector{Tuple{String,String}}(),
+)
 
     # Get extension without leading dot
-    ext = splitext(input_path)[end][2:end] 
+    ext = splitext(input_path)[end][2:end]
     input_ext = get_InputExt(ext)()
     return preprocess_input(input_path, input_ext, custom_metadata)
 end
@@ -401,7 +409,11 @@ Specify the extension type of `input_path` manually, then preprocess the ipnut.
 
 If the extension of `input_path` is not defined by `BetterInputFiles`, but acts like a defined extension, you can specify which extension to use via this function, which will then run [`preprocess_input(::AbstractString, ::String)`](@ref)
 """
-function preprocess_input(input_path::AbstractString, ext::String, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
+function preprocess_input(
+    input_path::AbstractString,
+    ext::String,
+    custom_metadata::Vector{Tuple{String,String}} = Vector{Tuple{String,String}}(),
+)
 
     input_ext = get_InputExt(ext)()
     return preprocess_input(input_path, input_ext, custom_metadata)
@@ -418,11 +430,15 @@ Preprocess the input path before running setup.
 
 Preprocessing includes adding metadata comments at the top-level, including other files, inserting environmental variables, propegating default values, interpolating values, and ensuring all variables are upper-case.
 """
-function preprocess_input(input_path::AbstractString, ext::InputExt, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
+function preprocess_input(
+    input_path::AbstractString,
+    ext::InputExt,
+    custom_metadata::Vector{Tuple{String,String}} = Vector{Tuple{String,String}}(),
+)
     input_path = abspath(input_path)
     raw = load_raw_inputfile(input_path)
     raw = add_metadata(raw, ext, input_path, custom_metadata)
-    raw = process_includes(raw, input_path) 
+    raw = process_includes(raw, input_path)
     raw = process_env_vars(raw)
     input = process_interpolation(raw, ext)
     return input, ext
@@ -440,7 +456,12 @@ Add metadata comment to top-level of .toml file
 
 Adds a new "METADATA" key, containing the date of creation and `input_path` 
 """
-function add_metadata(raw::String, ::TOMLExt, input_path::AbstractString, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
+function add_metadata(
+    raw::String,
+    ::TOMLExt,
+    input_path::AbstractString,
+    custom_metadata::Vector{Tuple{String,String}} = Vector{Tuple{String,String}}(),
+)
     date = today()
     time = Dates.format(now(), "HH:MM:SS")
     metadata = "[ METADATA ]\n    DATE = \"$date\"\n    TIME = \"$time\"\n    ORIGINAL = \"$input_path\"\n"
@@ -462,7 +483,12 @@ Add metadata comment to top-level of .yaml file
 
 Adds a new "METADATA" key, containing the date of creation and `input_path` 
 """
-function add_metadata(raw::String, ::YAMLExt, input_path::AbstractString, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
+function add_metadata(
+    raw::String,
+    ::YAMLExt,
+    input_path::AbstractString,
+    custom_metadata::Vector{Tuple{String,String}} = Vector{Tuple{String,String}}(),
+)
     date = today()
     metadata = "METADATA:\n    DATE: \"$date\"\n    ORIGINAL: \"$input_path\"\n"
     for (key, value) in custom_metadata
@@ -483,7 +509,12 @@ Add metadata comment to top-level of .json file
 
 Adds a new "METADATA" key, containing the date of creation and `input_path` 
 """
-function add_metadata(raw::String, ::JSONExt, input_path::AbstractString, custom_metadata::Vector{Tuple{String, String}} = Vector{Tuple{String, String}}())
+function add_metadata(
+    raw::String,
+    ::JSONExt,
+    input_path::AbstractString,
+    custom_metadata::Vector{Tuple{String,String}} = Vector{Tuple{String,String}}(),
+)
 
     date = today()
     m_str = "\n        \"DATE\": \"$date\",\n        \"ORIGINAL\": \"$input_path\"\n"
@@ -571,7 +602,7 @@ function process_interpolation(raw::String, ext::InputExt)
             raw = replace(raw, "<%$key>" => "\"<%$key>\"")
         end
     end
-    input::Dict{String, Any} = load_input(raw, ext)
+    input::Dict{String,Any} = load_input(raw, ext)
     # Get default values, checking both `default` and `DEFAULT`
     default = Dict()
     if "default" in keys(input)
@@ -599,7 +630,7 @@ function process_interpolation(input::Dict, default::Dict)
             # Get the set of all types contained in value
             value_types = collect(Set(typeof.(value)))
             # If value is a list of key => value pairs, recurse interpolation
-            if (length(value_types) == 1) && (value_types[1] == Dict{String, Any})
+            if (length(value_types) == 1) && (value_types[1] == Dict{String,Any})
                 input[key] = [process_interpolation(v, default) for v in value]
             end
         elseif typeof(value) <: AbstractString
@@ -608,10 +639,14 @@ function process_interpolation(input::Dict, default::Dict)
                 for k in m.captures
                     if k in keys(input)
                         input[key] = input[k]
-                    elseif k in keys(default) 
+                    elseif k in keys(default)
                         input[key] = default[k]
                     else
-                        throw(ErrorException("Can not interpolate $k, not found in $(keys(input)), nor in $(keys(default))"))
+                        throw(
+                            ErrorException(
+                                "Can not interpolate $k, not found in $(keys(input)), nor in $(keys(default))",
+                            ),
+                        )
                     end
                 end
             end
