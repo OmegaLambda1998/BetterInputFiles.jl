@@ -1,2 +1,3 @@
 *Manifest.toml
 /doc/build/
+/test/test_files/input_files/*/Output/*
