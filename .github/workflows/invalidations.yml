@@ -1,0 +1,26 @@
+name: Invalidations
+
+on:
+  push:
+    branches:
+      - main
+    tags: ['*']
+  workflow_dispatch:
+
+concurrency:
+  # Skip intermediate builds: always.
+  # Cancel intermediate builds: always.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: julia-actions/setup-julia@latest
+      with:
+        version: '1'
+    - uses: julia-actions/cache@v2
+    - uses: julia-actions/julia-buildpkg@v1
+    - uses: julia-actions/julia-invalidations@v1
