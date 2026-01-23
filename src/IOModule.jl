@@ -359,7 +359,7 @@ end
 Updated the case of every element in `input`.
 
 # Arguments
-- `input::AbstractArray`: Input to process 
+- `input::AbstractArray`: Input to process
 """
 function update_case(input::AbstractArray)
     return update_case.(input)
@@ -385,7 +385,7 @@ Automatically detect extension type of `input_path`, then preprocess the input.
 # Arguments
 - `input_path::AbstractString`: Input file to preprocess
 
-Will error if the extension of `input_path` is not part of [`exts`](@ref). If you wish to manually specify the extension, use `[preprocess_input(::AbstractString, ::String)]`(@ref). After the extension is found, will run [`preprocess_input(::AbstractString, ::String)]`(@ref) 
+Will error if the extension of `input_path` is not part of [`exts`](@ref). If you wish to manually specify the extension, use `[preprocess_input(::AbstractString, ::String)]`(@ref). After the extension is found, will run [`preprocess_input(::AbstractString, ::String)]`(@ref)
 """
 function preprocess_input(
     input_path::AbstractString,
@@ -454,7 +454,7 @@ Add metadata comment to top-level of .toml file
 - `ext::TOMLExt`: Extension of input file
 - `input_path::AbstractString`: Path to input file
 
-Adds a new "METADATA" key, containing the date of creation and `input_path` 
+Adds a new "METADATA" key, containing the date of creation and `input_path`
 """
 function add_metadata(
     raw::String,
@@ -481,7 +481,7 @@ Add metadata comment to top-level of .yaml file
 - `ext::YAMLExt`: Extension of input file
 - `input_path::AbstractString`: Path to input file
 
-Adds a new "METADATA" key, containing the date of creation and `input_path` 
+Adds a new "METADATA" key, containing the date of creation and `input_path`
 """
 function add_metadata(
     raw::String,
@@ -507,7 +507,7 @@ Add metadata comment to top-level of .json file
 - `ext::JSONExt`: Extension of input file
 - `input_path::AbstractString`: Path to input file
 
-Adds a new "METADATA" key, containing the date of creation and `input_path` 
+Adds a new "METADATA" key, containing the date of creation and `input_path`
 """
 function add_metadata(
     raw::String,
